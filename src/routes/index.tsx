@@ -4,10 +4,10 @@ import { NikhilLanding } from "@/components/nikhil-landing";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Nikhil Sharma | Business Growth Maestro" },
-      { name: "description", content: "Meet Nikhil Sharma—entrepreneur, business growth strategist and digital transformation expert with more than 20 years of experience." },
-      { property: "og:title", content: "Nikhil Sharma | Business Growth Maestro" },
-      { property: "og:description", content: "Two decades of building ventures, transforming businesses and mentoring founders." },
+      { title: "Elevated India | Private Luxury Journeys by Nikhil Sharma" },
+      { name: "description", content: "Elevated India is a private luxury travel house founded by Nikhil Sharma—bespoke journeys across India and Nepal with rare access, cultural depth and complete discretion." },
+      { property: "og:title", content: "Elevated India | Private Luxury Journeys by Nikhil Sharma" },
+      { property: "og:description", content: "Palaces, tiger country and backwaters, privately designed and personally run—own guides, own fleet, 24/7 control room." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],

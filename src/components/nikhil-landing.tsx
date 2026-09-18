@@ -1,66 +1,152 @@
-import { ArrowUpRight, Linkedin, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { ArrowUpRight, Award, Menu, X } from "lucide-react";
+import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { useReveal } from "@/hooks/use-reveal";
 import portrait from "@/assets/nikhil/portrait.webp";
-import anandbodh from "@/assets/nikhil/anandbodh.jpg";
-import consultantsReview from "@/assets/nikhil/consultants-review.webp";
-import easehire from "@/assets/nikhil/easehire.webp";
-import fabulous from "@/assets/nikhil/fabulous.webp";
-import goCommercially from "@/assets/nikhil/gocommercially.webp";
-import iconsbase from "@/assets/nikhil/iconsbase.webp";
-import siliconIndia from "@/assets/nikhil/siliconindia.webp";
-import vanishingIndia from "@/assets/nikhil/vanishing-india.webp";
+import palaceDusk from "@/assets/elevated/palace-dusk.jpg";
+import wildernessDawn from "@/assets/elevated/wilderness-dawn.jpg";
+import backwatersGold from "@/assets/elevated/backwaters-gold.jpg";
+import desertFort from "@/assets/elevated/desert-fort.jpg";
+import paperTexture from "@/assets/elevated/paper-texture.jpg";
+
+const SITE = "https://www.elevatedindia.com/";
 
 const navItems = [
-  ["Story", "#story"],
-  ["Ventures", "#ventures"],
-  ["Method", "#method"],
+  ["Founder", "#founder"],
+  ["What we curate", "#curate"],
+  ["Journeys", "#journeys"],
+  ["How we run it", "#ground"],
   ["Recognition", "#recognition"],
 ] as const;
 
-const ventures = [
-  { name: "AnandBodh", detail: "Wellness & fulfilled living", logo: anandbodh },
-  { name: "IconsBase", detail: "Ideas to market opportunities", logo: iconsbase },
-  { name: "EaseHire", detail: "Recruitment technology", logo: easehire },
-  { name: "Fabulous.Media", detail: "Media & marketing network", logo: fabulous },
-  { name: "GoCommercially", detail: "Business growth strategy", logo: goCommercially },
-  { name: "Vanishing India", detail: "People, art & living traditions", logo: vanishingIndia },
+const credentials = [
+  "5.0 on TripAdvisor · 621+ reviews",
+  "IATO Member",
+  "Recognised by the Ministry of Tourism",
+  "Two decades on India’s roads",
+  "Own licensed guides & chauffeured fleet",
+  "24/7 control room on every mile",
 ] as const;
 
-const method = [
-  ["01", "Validate", "Test the market, the problem and the opportunity before scaling the solution."],
-  ["02", "Position", "Build a differentiated brand and a clear business story that earns attention."],
-  ["03", "Acquire", "Create an accountable marketing and sales engine around measurable demand."],
-  ["04", "Scale", "Strengthen operations, automation and decision-making for durable growth."],
+const interests = [
+  ["Royal Residences & Palace Life", "Heritage · Maharaja estates · Haveli stays"],
+  ["Wilderness & Private Safaris", "Wildlife · Jungle camps · Tiger reserves"],
+  ["Spiritual & Transformational", "Varanasi · Ashrams · Sacred rivers"],
+  ["Art, Design & Culture", "Craft · Architecture · Living traditions"],
+  ["Celebrations & Private Events", "Weddings · Milestones · Bespoke occasions"],
+  ["Family & Multi-Generational", "Luxury · Discovery · Shared memory"],
 ] as const;
+
+const journeys = [
+  {
+    region: "Central India Reserves",
+    days: "8–10 Days",
+    title: "The Wild Heart of India",
+    blurb:
+      "Private safari vehicles, exclusive jungle lodges and expert naturalists in Kanha and Bandhavgarh — India’s last great wild places.",
+    image: wildernessDawn,
+  },
+  {
+    region: "Rajasthan",
+    days: "16 Days",
+    title: "Palaces & Wilderness",
+    blurb:
+      "Delhi to Udaipur’s lake palaces, the leopards of Jawai and the desert forts of Jodhpur and Jaipur — a wholly private royal passage.",
+    image: desertFort,
+  },
+  {
+    region: "North & South India",
+    days: "16 Days",
+    title: "Imperial Cities & Kerala Backwaters",
+    blurb:
+      "Delhi, Agra and Jaipur woven with Kerala’s tea hills and the still backwaters of Kumarakom, north and south in one seamless journey.",
+    image: backwatersGold,
+  },
+  {
+    region: "North India & Nepal",
+    days: "12 Days",
+    title: "Golden Triangle with Kathmandu",
+    blurb:
+      "A majestic passage across northern India’s imperial capitals and the sacred valleys of Nepal.",
+    image: palaceDusk,
+  },
+] as const;
+
+const principles = [
+  [
+    "Deep local intelligence",
+    "Decades of intimate knowledge across India’s regions, cultures and communities — insights no algorithm can replicate.",
+  ],
+  [
+    "Curated, not crowded",
+    "Every element is hand-selected. Fewer choices, better choices, tailored precisely to your intent and sensibility.",
+  ],
+  [
+    "Complete discretion",
+    "Privacy is our first principle. We operate with the discretion of a private household, not a public business.",
+  ],
+] as const;
+
+function Section({
+  id,
+  className,
+  children,
+}: {
+  id?: string;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  const reveal = useReveal<HTMLDivElement>();
+  return (
+    <section id={id} className={`scroll-mt-16 ${className ?? ""}`}>
+      <div ref={reveal.ref} className={reveal.className}>
+        {children}
+      </div>
+    </section>
+  );
+}
 
 export function NikhilLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      setProgress(max > 0 ? Math.min(1, window.scrollY / max) : 0);
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background font-sans text-foreground selection:bg-primary selection:text-primary-foreground">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-ivory/10 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 lg:px-12">
-          <a href="#top" className="font-serif text-2xl text-ivory" aria-label="Nikhil Sharma, home">
-            Nikhil Sharma<span className="text-primary">.</span>
+          <a href="#top" className="font-serif text-xl leading-none text-ivory sm:text-2xl" aria-label="Elevated India, home">
+            Elevated<span className="text-primary"> India</span>
           </a>
-          <nav className="hidden items-center gap-8 md:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
             {navItems.map(([label, href]) => (
-              <a key={href} href={href} className="text-xs uppercase tracking-[0.18em] text-ivory/60 transition-colors hover:text-ivory focus-visible:text-ivory">
+              <a key={href} href={href} className="text-[11px] uppercase tracking-[0.18em] text-ivory/60 transition-colors hover:text-primary">
                 {label}
               </a>
             ))}
           </nav>
-          <Button asChild className="hidden h-9 rounded-none border border-primary/60 bg-transparent px-4 text-xs uppercase tracking-[0.16em] text-primary shadow-none hover:bg-primary hover:text-primary-foreground sm:inline-flex">
-            <a href="#contact">Enquire</a>
+          <Button asChild className="hidden h-9 rounded-none border border-primary/60 bg-transparent px-4 text-[11px] uppercase tracking-[0.16em] text-primary shadow-none hover:bg-primary hover:text-primary-foreground sm:inline-flex">
+            <a href="#invitation">Speak with a curator</a>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMenuOpen((value) => !value)} className="text-ivory hover:bg-ivory/10 hover:text-ivory md:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
+          <Button variant="ghost" size="icon" onClick={() => setMenuOpen((v) => !v)} className="text-ivory hover:bg-ivory/10 hover:text-ivory lg:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
             {menuOpen ? <X /> : <Menu />}
           </Button>
         </div>
+        <div className="h-px w-full bg-ivory/10" aria-hidden="true">
+          <div className="h-px bg-primary transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
+        </div>
         {menuOpen ? (
-          <nav className="border-t border-ivory/10 bg-background px-5 py-5 md:hidden" aria-label="Mobile navigation">
+          <nav className="border-t border-ivory/10 bg-background px-5 py-4 lg:hidden" aria-label="Mobile navigation">
             {navItems.map(([label, href]) => (
               <a key={href} href={href} onClick={() => setMenuOpen(false)} className="block border-b border-ivory/10 py-4 text-sm uppercase tracking-[0.18em] text-ivory/70">
                 {label}
@@ -71,107 +157,219 @@ export function NikhilLanding() {
       </header>
 
       <main id="top">
-        <section className="relative min-h-[720px] overflow-hidden pt-16 lg:min-h-[760px]">
-          <img src={portrait} alt="Nikhil Sharma beside an aircraft" className="absolute inset-0 h-full w-full object-cover object-[62%_center] lg:object-center" />
+        {/* Opening */}
+        <section className="relative min-h-[680px] overflow-hidden pt-16 lg:min-h-[780px]">
+          <img src={palaceDusk} alt="Lantern-lit palace courtyard at dusk in India" width={1920} height={1200} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-hero-scrim" aria-hidden="true" />
-          <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
-          <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-[1440px] items-center px-5 py-16 lg:min-h-[760px] lg:px-12">
+          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
+          <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-[1440px] items-center px-5 py-20 lg:min-h-[780px] lg:px-12">
             <div className="max-w-3xl">
-              <p className="rise flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-primary sm:text-xs">
-                <span className="h-px w-10 bg-primary" /> Entrepreneur · Strategist · Digital Transformer
+              <p className="rise flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-primary">
+                <span className="h-px w-10 bg-primary" /> Curators of Extraordinary India
               </p>
-              <h1 className="rise rise-delay-1 mt-7 font-serif text-[clamp(3.25rem,8vw,7.3rem)] leading-[0.9] text-ivory">
-                The architect of <span className="italic text-primary">compounding</span> growth.
+              <h1 className="rise rise-delay-1 mt-7 font-serif text-[clamp(3rem,8vw,7rem)] leading-[0.9] text-ivory">
+                Elevated <span className="italic text-primary">India.</span>
               </h1>
-              <p className="rise rise-delay-2 mt-8 max-w-[48ch] text-base leading-relaxed text-ivory/72 sm:text-lg">
-                Nikhil Sharma turns business ambition into clear strategy, stronger brands and scalable ventures—built from more than two decades of hands-on experience.
+              <p className="rise rise-delay-2 mt-7 max-w-[46ch] text-base leading-relaxed text-ivory/75 sm:text-lg">
+                Bespoke journeys crafted with rare access, cultural depth and uncompromising discretion — across India and Nepal.
               </p>
-              <div className="rise rise-delay-3 relative mt-10 max-w-2xl border-y border-ivory/15 bg-ivory/[0.04] backdrop-blur-md">
-                <div className="metric-sweep" aria-hidden="true" />
-                <div className="grid grid-cols-3 divide-x divide-ivory/10">
-                  {[['20+', 'Years experience'], ['1,000+', 'Clients served'], ['55+', 'Startups & ventures']].map(([value, label]) => (
-                    <div key={label} className="px-3 py-5 sm:px-6 sm:py-6">
-                      <div className="font-serif text-3xl text-ivory sm:text-5xl">{value}</div>
-                      <div className="mt-2 text-[9px] uppercase leading-snug tracking-[0.12em] text-ivory/50 sm:text-[11px]">{label}</div>
-                    </div>
-                  ))}
-                </div>
+              <div className="rise rise-delay-3 mt-10 flex flex-wrap gap-3">
+                <Button asChild className="h-12 rounded-none bg-primary px-6 text-xs uppercase tracking-[0.16em] text-primary-foreground hover:bg-ivory">
+                  <a href="#journeys">Explore private journeys</a>
+                </Button>
+                <Button asChild variant="outline" className="h-12 rounded-none border-ivory/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ivory hover:bg-ivory hover:text-ink">
+                  <a href="#invitation">Speak with a journey curator</a>
+                </Button>
               </div>
             </div>
           </div>
         </section>
 
-        <section id="story" className="scroll-mt-16 bg-ivory text-ink">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
-            <div className="lg:col-span-7">
-              <p className="section-label">(a) The story</p>
-              <h2 className="mt-6 font-serif text-[clamp(2.7rem,5vw,4.8rem)] leading-[0.98]">From builder to the <span className="italic">mentor behind builders.</span></h2>
-              <p className="mt-8 max-w-[58ch] text-lg leading-relaxed text-ink/70">Since 2005, Nikhil has worked at the intersection of business strategy, digital transformation and execution. His work spans new ventures, established businesses and founders preparing for their next stage of growth.</p>
-              <p className="mt-5 max-w-[58ch] leading-relaxed text-ink/60">As the founder of multiple ventures and creator of the InvestorReady™ methodology, he brings an operator’s perspective to strategy. He was also recognised as a former Truecaller brand ambassador.</p>
-              <a href="https://www.nikhilsharma.com/home" target="_blank" rel="noreferrer" className="mt-9 inline-flex items-center gap-2 border-b border-primary pb-1 text-sm font-medium uppercase tracking-[0.14em] text-ink transition-colors hover:text-primary">Read his full profile <ArrowUpRight className="size-4" /></a>
-            </div>
-            <figure className="lg:col-span-5">
-              <div className="aspect-[4/3] overflow-hidden bg-paper">
-                <img src={portrait} alt="Nikhil Sharma, entrepreneur and business strategist" className="h-full w-full object-cover object-[70%_center] grayscale-[15%]" />
-              </div>
-              <figcaption className="mt-3 text-[10px] uppercase tracking-[0.16em] text-ink/45">Twenty years of building, advising and transforming businesses</figcaption>
-            </figure>
-          </div>
-        </section>
-
-        <section id="ventures" className="scroll-mt-16 bg-background py-24 text-ivory lg:py-32">
-          <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-            <div className="flex items-end justify-between gap-8">
-              <div><p className="section-label">(b) The ecosystem</p><h2 className="mt-6 font-serif text-[clamp(2.7rem,5vw,4.4rem)] leading-none">Ideas made <span className="italic text-primary">operational.</span></h2></div>
-              <p className="hidden max-w-sm text-sm leading-relaxed text-ivory/50 md:block">A cross-sector ecosystem connecting wellbeing, technology, hiring, media, growth and cultural preservation.</p>
-            </div>
-          </div>
-          <div className="venture-scroll mt-12 flex snap-x gap-5 overflow-x-auto px-5 pb-7 lg:px-12">
-            {ventures.map((venture, index) => (
-              <article key={venture.name} className="group w-[270px] shrink-0 snap-start border-t border-ivory/15 pt-5 sm:w-[310px]">
-                <div className="flex aspect-[4/3] items-center justify-center overflow-hidden bg-ivory p-9">
-                  <img src={venture.logo} alt={`${venture.name} logo`} className="max-h-24 max-w-full object-contain transition-transform duration-500 group-hover:scale-105" loading="lazy" />
-                </div>
-                <div className="mt-5 flex items-start justify-between gap-4">
-                  <div><h3 className="font-serif text-2xl">{venture.name}</h3><p className="mt-1 text-xs uppercase tracking-[0.14em] text-ivory/45">{venture.detail}</p></div>
-                  <span className="font-serif text-lg text-primary">0{index + 1}</span>
-                </div>
-              </article>
+        {/* Credential marquee */}
+        <div className="marquee-mask overflow-hidden border-y border-ivory/10 bg-background py-4">
+          <div className="marquee-track gap-10">
+            {[...credentials, ...credentials].map((item, index) => (
+              <span key={`${item}-${index}`} className="flex shrink-0 items-center gap-10 text-[10px] uppercase tracking-[0.2em] text-ivory/45 sm:text-[11px]">
+                {item}
+                <span className="h-1 w-1 rounded-full bg-primary/70" aria-hidden="true" />
+              </span>
             ))}
           </div>
-        </section>
+        </div>
 
-        <section id="method" className="scroll-mt-16 bg-ivory py-24 text-ink lg:py-32">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 lg:grid-cols-12 lg:px-12">
-            <div className="lg:col-span-4"><p className="section-label">(c) The method</p><h2 className="mt-6 font-serif text-[clamp(2.7rem,4.5vw,4rem)] leading-none">InvestorReady<span className="text-primary">™</span></h2><p className="mt-6 max-w-sm leading-relaxed text-ink/60">A practical path from market clarity to scalable growth—built around evidence, positioning and disciplined execution.</p></div>
-            <div className="grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:col-span-8">
-              {method.map(([number, title, description]) => <article key={title} className="border-t border-ink/15 pt-5"><p className="font-serif text-3xl text-primary">{number}</p><h3 className="mt-2 font-serif text-3xl">{title}</h3><p className="mt-3 text-sm leading-relaxed text-ink/60">{description}</p></article>)}
+        {/* Founder */}
+        <Section id="founder" className="bg-ivory text-ink" >
+          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+            <figure className="lg:col-span-5">
+              <div className="aspect-[4/5] overflow-hidden bg-paper">
+                <img src={portrait} alt="Nikhil Sharma, Founder and CEO of Elevated India" className="h-full w-full object-cover object-[68%_center]" loading="lazy" />
+              </div>
+              <figcaption className="mt-3 text-[10px] uppercase tracking-[0.16em] text-ink/45">Nikhil Sharma · Founder & CEO</figcaption>
+            </figure>
+            <div className="lg:col-span-7">
+              <p className="section-label">(a) The founder</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.5rem,5vw,4.6rem)] leading-[0.98]">
+                Most companies sell India. <span className="italic">We run it.</span>
+              </h2>
+              <p className="mt-8 max-w-[58ch] text-lg leading-relaxed text-ink/70">
+                Elevated India was founded by Nikhil Sharma as a private luxury travel house — not a package tour operator. Every itinerary is composed from scratch around your pace, your tastes and the occasion behind the trip.
+              </p>
+              <p className="mt-5 max-w-[58ch] leading-relaxed text-ink/60">
+                His conviction shapes the whole company: run the ground yourself. Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile, rather than handing guests to third parties. Elevated India is led with co-founder and director Manu Singh, with ground operations through India Personal Tours.
+              </p>
+              <blockquote className="mt-9 border-l border-primary pl-6 font-serif text-2xl leading-snug text-ink/80 sm:text-3xl">
+                “India is not a destination to be efficiently toured. It is an experience to be gradually, intimately and personally understood.”
+                <footer className="mt-4 text-[10px] uppercase tracking-[0.18em] text-ink/45">— The Elevated India philosophy</footer>
+              </blockquote>
             </div>
           </div>
-        </section>
+        </Section>
 
-        <section id="recognition" className="scroll-mt-16 bg-background py-24 text-ivory lg:py-32">
-          <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-            <p className="section-label">(d) Recognition</p>
-            <div className="mt-6 grid gap-12 lg:grid-cols-12">
-              <div className="lg:col-span-5"><h2 className="font-serif text-[clamp(2.7rem,5vw,4.5rem)] leading-none">Evidence over <span className="italic text-primary">adjectives.</span></h2><div className="mt-10 divide-y divide-ivory/10 border-y border-ivory/10">
-                {[['2019', 'Most Influential Digital Marketing Expert — India'], ['2019', 'Top Digital Marketing Consultant in India'], ['2019', 'Fearless Entrepreneur']].map(([year, title]) => <div key={title} className="flex gap-5 py-5"><span className="text-xs text-primary">{year}</span><p className="text-sm text-ivory/70">{title}</p></div>)}
-              </div></div>
-              <div className="grid grid-cols-2 gap-4 lg:col-span-7">
-                <a href="https://www.nikhilsharma.com/home" target="_blank" rel="noreferrer" className="group"><img src={siliconIndia} alt="siliconindia October 2021 cover featuring Nikhil Sharma's work" className="aspect-[4/5] w-full object-cover object-top transition-opacity group-hover:opacity-80" loading="lazy" /><p className="mt-4 font-serif text-xl">Profound Excellence in the Digital Frontier</p><p className="mt-1 text-xs uppercase tracking-[0.12em] text-ivory/40">siliconindia · 2021</p></a>
-                <a href="https://www.nikhilsharma.com/home" target="_blank" rel="noreferrer" className="group"><img src={consultantsReview} alt="Consultants Review February 2019 cover featuring Nikhil Sharma" className="aspect-[4/5] w-full object-cover object-top transition-opacity group-hover:opacity-80" loading="lazy" /><p className="mt-4 font-serif text-xl">Driving Business Growth with Pragmatic Technology</p><p className="mt-1 text-xs uppercase tracking-[0.12em] text-ivory/40">Consultants Review · 2019</p></a>
+        {/* What we curate */}
+        <Section id="curate" className="bg-background text-ivory">
+          <div className="mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <div className="flex flex-wrap items-end justify-between gap-8">
+              <div>
+                <p className="section-label">(b) What we curate</p>
+                <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
+                  The shape of <span className="italic text-primary">your journey.</span>
+                </h2>
+              </div>
+              <p className="max-w-sm text-sm leading-relaxed text-ivory/55">
+                We begin not with destinations, but with desire. What draws you — stillness or ceremony, wilderness or opulence, spirit or celebration?
+              </p>
+            </div>
+            <div className="mt-14 grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
+              {interests.map(([title, detail], index) => (
+                <article key={title} className="group border-t border-ivory/15 pt-5 transition-colors hover:border-primary">
+                  <p className="font-serif text-lg text-primary">0{index + 1}</p>
+                  <h3 className="mt-2 font-serif text-2xl leading-tight sm:text-3xl">{title}</h3>
+                  <p className="mt-3 text-xs uppercase tracking-[0.14em] text-ivory/45">{detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* Signature journeys */}
+        <Section id="journeys" className="relative overflow-hidden bg-ink text-ivory">
+          <img src={paperTexture} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.05]" loading="lazy" />
+          <div className="relative py-24 lg:py-32">
+            <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
+              <p className="section-label">(c) Our signatures</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
+                Journeys of rare <span className="italic text-primary">distinction.</span>
+              </h2>
+              <p className="mt-6 max-w-lg text-sm leading-relaxed text-ivory/55">
+                A curated selection of flagship itineraries. Each one a living journey — not a package, but a carefully composed narrative.
+              </p>
+            </div>
+            <div className="venture-scroll mt-12 flex snap-x gap-5 overflow-x-auto px-5 pb-8 lg:px-12">
+              {journeys.map((journey) => (
+                <article key={journey.title} className="group relative h-[460px] w-[80vw] shrink-0 snap-start overflow-hidden sm:w-[340px]">
+                  <img src={journey.image} alt={journey.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-transparent" aria-hidden="true" />
+                  <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 p-4">
+                    <span className="bg-primary px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-foreground">{journey.days}</span>
+                  </div>
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <p className="text-[10px] uppercase tracking-[0.16em] text-primary">{journey.region}</p>
+                    <h3 className="mt-2 font-serif text-2xl leading-tight text-ivory">{journey.title}</h3>
+                    <p className="mt-3 max-h-0 overflow-hidden text-sm leading-relaxed text-ivory/75 opacity-0 transition-all duration-500 group-hover:max-h-32 group-hover:opacity-100 group-focus-within:max-h-32 group-focus-within:opacity-100">
+                      {journey.blurb}
+                    </p>
+                  </div>
+                </article>
+              ))}
+            </div>
+            <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
+              <a href={SITE} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 border-b border-primary pb-1 text-xs uppercase tracking-[0.16em] text-ivory transition-colors hover:text-primary">
+                View all journeys <ArrowUpRight className="size-4" />
+              </a>
+            </div>
+          </div>
+        </Section>
+
+        {/* How we run it */}
+        <Section id="ground" className="bg-ivory text-ink">
+          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+            <div className="lg:col-span-4">
+              <p className="section-label">(d) How we run it</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.3rem,4.5vw,3.8rem)] leading-none">
+                Privately designed. Personally run.
+              </h2>
+              <p className="mt-6 max-w-sm leading-relaxed text-ink/60">
+                Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile — the single fact that keeps a journey unhurried, seamless and discreet.
+              </p>
+            </div>
+            <div className="grid gap-10 sm:grid-cols-3 lg:col-span-8">
+              {principles.map(([title, body], index) => (
+                <article key={title} className="border-t border-ink/15 pt-5">
+                  <p className="font-serif text-2xl text-primary">0{index + 1}</p>
+                  <h3 className="mt-2 font-serif text-2xl leading-tight">{title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* Recognition */}
+        <Section id="recognition" className="bg-background text-ivory">
+          <div className="mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <p className="section-label">(e) Recognition</p>
+            <div className="mt-6 grid items-center gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-6">
+                <h2 className="font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
+                  Excellence in curated <span className="italic text-primary">luxury travel.</span>
+                </h2>
+                <div className="mt-8 h-px w-40 gold-rule" aria-hidden="true" />
+                <p className="mt-8 max-w-[52ch] leading-relaxed text-ivory/65">
+                  Awarded to Elevated India at the ET NOW.IN Business Conclave & Awards 2026, West Edition — Mumbai, 25 August 2026.
+                </p>
+              </div>
+              <div className="lg:col-span-6">
+                <div className="border border-ivory/15 bg-ivory/[0.03] p-8 backdrop-blur-sm sm:p-12">
+                  <Award className="size-8 text-primary" aria-hidden="true" />
+                  <p className="mt-6 font-serif text-3xl leading-tight sm:text-4xl">
+                    Excellence in Curated Luxury Travel Experiences
+                  </p>
+                  <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ivory/45">
+                    ET NOW.IN Business Conclave & Awards 2026 · West Edition · Mumbai
+                  </p>
+                </div>
               </div>
             </div>
-
-            <div id="contact" className="mt-28 grid items-end gap-10 border-t border-ivory/15 pt-16 lg:grid-cols-2">
-              <h2 className="font-serif text-[clamp(3rem,6vw,5.5rem)] leading-[0.92]">Let’s build what <span className="italic text-primary">compounds.</span></h2>
-              <div className="lg:text-right"><p className="max-w-md leading-relaxed text-ivory/60 lg:ml-auto">For business strategy, mentorship or transformation, connect directly through Nikhil’s official channels.</p><div className="mt-8 flex flex-wrap gap-3 lg:justify-end"><Button asChild className="h-12 rounded-none bg-primary px-6 uppercase tracking-[0.14em] text-primary-foreground hover:bg-ivory"><a href="https://www.nikhilsharma.com/home" target="_blank" rel="noreferrer">Visit official site <ArrowUpRight /></a></Button><Button asChild variant="outline" className="h-12 rounded-none border-ivory/20 bg-transparent px-5 text-ivory hover:bg-ivory hover:text-ink"><a href="https://www.linkedin.com/in/hirenikhilsharma" target="_blank" rel="noreferrer" aria-label="Connect with Nikhil Sharma on LinkedIn"><Linkedin /> LinkedIn</a></Button></div></div>
-            </div>
           </div>
-        </section>
+        </Section>
+
+        {/* Invitation */}
+        <Section id="invitation" className="relative overflow-hidden">
+          <img src={backwatersGold} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+          <div className="absolute inset-0 bg-background/85" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 py-28 text-center lg:px-12 lg:py-36">
+            <p className="section-label">Three questions → your journey</p>
+            <h2 className="mx-auto mt-6 max-w-4xl font-serif text-[clamp(2.6rem,6vw,5.4rem)] leading-[0.94] text-ivory">
+              Where will India <span className="italic text-primary">take you?</span>
+            </h2>
+            <p className="mx-auto mt-7 max-w-xl leading-relaxed text-ivory/65">
+              Begin with a conversation. A journey curator will compose something entirely your own, from the first idea to the last mile.
+            </p>
+            <Button asChild className="mt-10 h-12 rounded-none bg-primary px-8 text-xs uppercase tracking-[0.16em] text-primary-foreground hover:bg-ivory">
+              <a href={SITE} target="_blank" rel="noreferrer">
+                Visit elevatedindia.com <ArrowUpRight />
+              </a>
+            </Button>
+          </div>
+        </Section>
       </main>
 
-      <footer className="border-t border-ivory/10 bg-background text-ivory/40"><div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-7 text-[10px] uppercase tracking-[0.14em] sm:flex-row sm:justify-between lg:px-12"><span>Nikhil Sharma · Business Growth Maestro</span><span>Independent tribute concept · 2026</span></div></footer>
+      <footer className="border-t border-ivory/10 bg-background text-ivory/40">
+        <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-7 text-[10px] uppercase tracking-[0.14em] sm:flex-row sm:justify-between lg:px-12">
+          <span>Elevated India · Nikhil Sharma, Founder & CEO</span>
+          <span>Independent tribute concept · 2026</span>
+        </div>
+      </footer>
     </div>
   );
 }
