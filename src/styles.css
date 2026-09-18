@@ -222,13 +222,92 @@
 .sheen { position: absolute; inset-block: 0; width: 45%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 16%, transparent), transparent); pointer-events: none; opacity: 0; }
 .reveal.is-visible .sheen { opacity: 1; animation: sheen 1.9s cubic-bezier(.32,.72,0,1) 0.35s both; }
 
+/* ---- layered surface craft ---- */
+
+/* fine film grain over dark sections */
+@utility grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.05;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* soft edge vignette so photography melts into the page */
+@utility vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 80% at 50% 45%, transparent 40%, color-mix(in oklab, var(--background) 72%, transparent) 100%);
+}
+
+/* warm gold bloom behind headlines */
+@utility glow-radial {
+  position: absolute;
+  pointer-events: none;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--primary) 22%, transparent), transparent);
+  filter: blur(18px);
+}
+
+/* faint gold hairline grid on ivory surfaces */
+@utility paper-grid {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.4;
+  background-image:
+    linear-gradient(90deg, color-mix(in oklab, var(--primary) 16%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in oklab, var(--primary) 10%, transparent) 1px, transparent 1px);
+  background-size: 96px 96px;
+  mask-image: radial-gradient(90% 70% at 50% 40%, black, transparent);
+}
+
+/* pressed-foil award surface */
+@utility foil {
+  background:
+    linear-gradient(125deg,
+      color-mix(in oklab, var(--primary) 14%, transparent) 0%,
+      color-mix(in oklab, var(--ivory) 5%, transparent) 26%,
+      color-mix(in oklab, var(--primary) 20%, transparent) 48%,
+      color-mix(in oklab, var(--ivory) 4%, transparent) 72%,
+      color-mix(in oklab, var(--primary) 12%, transparent) 100%);
+}
+
+/* headline lines rising one after another */
+.line-rise > span { display: block; opacity: 0; transform: translateY(0.5em); transition: opacity 0.9s cubic-bezier(.32,.72,0,1), transform 0.9s cubic-bezier(.32,.72,0,1); }
+.reveal.is-visible .line-rise > span { opacity: 1; transform: none; }
+.reveal.is-visible .line-rise > span:nth-child(2) { transition-delay: 0.12s; }
+.reveal.is-visible .line-rise > span:nth-child(3) { transition-delay: 0.24s; }
+
+/* gallery rows drifting sideways */
+@keyframes drift-left { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes drift-right { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+.drift-row { display: flex; width: max-content; animation: drift-left 58s linear infinite; }
+.drift-row-reverse { animation-name: drift-right; animation-duration: 72s; }
+.drift-pause:hover .drift-row { animation-play-state: paused; }
+
+/* image frame whose photo zooms and caption lifts on hover */
+.zoom-frame img { transition: transform 1.4s cubic-bezier(.32,.72,0,1), filter 0.7s ease; }
+.zoom-frame:hover img { transform: scale(1.07); }
+.zoom-frame figcaption { opacity: 0; transform: translateY(10px); transition: opacity 0.5s ease, transform 0.5s cubic-bezier(.32,.72,0,1); }
+.zoom-frame:hover figcaption, .zoom-frame:focus-within figcaption { opacity: 1; transform: none; }
+
+/* chapter panels sliding in from their own side */
+.reveal .slide-l { opacity: 0; transform: translateX(-40px); transition: opacity 0.9s cubic-bezier(.32,.72,0,1), transform 0.9s cubic-bezier(.32,.72,0,1); }
+.reveal .slide-r { opacity: 0; transform: translateX(40px); transition: opacity 0.9s cubic-bezier(.32,.72,0,1), transform 0.9s cubic-bezier(.32,.72,0,1); }
+.reveal.is-visible .slide-l, .reveal.is-visible .slide-r { opacity: 1; transform: none; }
+
 @media (max-width: 767px) {
   .bg-hero-scrim { background: linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent), color-mix(in oklab, var(--background) 94%, transparent)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .rise, .metric-sweep, .marquee-track, .glow-breathe, .scroll-cue { animation: none; }
+  .rise, .metric-sweep, .marquee-track, .glow-breathe, .scroll-cue, .drift-row { animation: none; }
+  .line-rise > span, .reveal .slide-l, .reveal .slide-r { opacity: 1; transform: none; transition: none; }
+  .zoom-frame figcaption { opacity: 1; transform: none; }
+  .zoom-frame:hover img { transform: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .reveal .stagger { opacity: 1; transform: none; transition: none; }
   .rule-draw { transform: none; transition: none; }

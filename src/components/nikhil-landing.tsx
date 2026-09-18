@@ -1,5 +1,5 @@
 import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Menu, MoveHorizontal, X } from "lucide-react";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/use-reveal";
@@ -10,14 +10,21 @@ import wildernessDawn from "@/assets/elevated/wilderness-dawn.jpg";
 import backwatersGold from "@/assets/elevated/backwaters-gold.jpg";
 import desertFort from "@/assets/elevated/desert-fort.jpg";
 import paperTexture from "@/assets/elevated/paper-texture.jpg";
+import dunesDusk from "@/assets/elevated/dunes-dusk.jpg";
+import fortWalls from "@/assets/elevated/fort-walls.jpg";
+import artisanHands from "@/assets/elevated/artisan-hands.jpg";
+import palaceNight from "@/assets/elevated/palace-night.jpg";
+import backwaterDawn from "@/assets/elevated/backwater-dawn.jpg";
+import marketTexture from "@/assets/elevated/market-texture.jpg";
 
 const SITE = "https://www.elevatedindia.com/";
 
 const navItems = [
   ["My story", "#story"],
+  ["Chapters", "#chapters"],
   ["Elevated India", "#company"],
-  ["How I run it", "#ground"],
   ["Journeys", "#journeys"],
+  ["Field notes", "#gallery"],
   ["Recognition", "#recognition"],
 ] as const;
 
@@ -39,13 +46,46 @@ const interests = [
   "Family & multi-generational",
 ] as const;
 
-const timeline = [
-  ["Two decades earlier", "Learning India the slow way — its regions, languages and the families who keep its crafts alive."],
-  ["The refusal", "Turning away from the package model: fixed routes, rented vehicles, borrowed guides."],
-  ["Elevated India", "Founding a private luxury travel house with co-founder and director Manu Singh."],
-  ["Ground brought in-house", "Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile."],
-  ["2026", "Excellence in Curated Luxury Travel Experiences, ET NOW.IN Business Conclave & Awards."],
+const chapters = [
+  {
+    index: "01",
+    when: "Two decades earlier",
+    title: "Learning the country the slow way",
+    body:
+      "Long before I had a company, I was travelling India without a script — its regions, its languages, the families who keep its crafts, kitchens and palaces alive. That apprenticeship is the whole of my work.",
+    image: artisanHands,
+    alt: "An artisan block-printing indigo cloth by hand",
+  },
+  {
+    index: "02",
+    when: "The refusal",
+    title: "I would not sell a package",
+    body:
+      "Travellers were arriving with real curiosity and being handed fixed routes, rented vehicles and borrowed guides — a promise made by one company and kept, or not kept, by another. I refused to build that.",
+    image: fortWalls,
+    alt: "Carved sandstone fort walls in golden evening light",
+  },
+  {
+    index: "03",
+    when: "Elevated India",
+    title: "A private travel house instead",
+    body:
+      "I founded Elevated India with my co-founder and director, Manu Singh: a house that composes every itinerary from scratch, around one guest at a time, across India and Nepal.",
+    image: palaceNight,
+    alt: "A lantern-lit palace courtyard reflected in still water at night",
+  },
+  {
+    index: "04",
+    when: "Ground brought in-house",
+    title: "You must own the ground you promise",
+    body:
+      "Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile. If I tell you a morning will be unhurried and private, the guide, the car and the room have to be mine to answer for.",
+    image: dunesDusk,
+    alt: "Desert dunes at dusk with a distant caravan on the ridge",
+  },
 ] as const;
+
+const filters = ["All journeys", "Palaces", "Wilderness", "Culture", "Backwaters"] as const;
 
 const journeys = [
   {
@@ -55,6 +95,7 @@ const journeys = [
     blurb:
       "Private safari vehicles, exclusive jungle lodges and expert naturalists in Kanha and Bandhavgarh — India’s last great wild places.",
     image: wildernessDawn,
+    tags: ["Wilderness"],
   },
   {
     region: "Rajasthan",
@@ -63,6 +104,7 @@ const journeys = [
     blurb:
       "Delhi to Udaipur’s lake palaces, the leopards of Jawai and the desert forts of Jodhpur and Jaipur — a wholly private royal passage.",
     image: desertFort,
+    tags: ["Palaces", "Wilderness"],
   },
   {
     region: "North & South India",
@@ -71,6 +113,7 @@ const journeys = [
     blurb:
       "Delhi, Agra and Jaipur woven with Kerala’s tea hills and the still backwaters of Kumarakom, north and south in one seamless journey.",
     image: backwatersGold,
+    tags: ["Backwaters", "Culture"],
   },
   {
     region: "North India & Nepal",
@@ -79,7 +122,17 @@ const journeys = [
     blurb:
       "A majestic passage across northern India’s imperial capitals and the sacred valleys of Nepal.",
     image: palaceDusk,
+    tags: ["Culture", "Palaces"],
   },
+] as const;
+
+const gallery = [
+  [dunesDusk, "Desert dunes at dusk", "Evenings in the Thar, paced around silence and firelight."],
+  [palaceNight, "Palace courtyard at night", "Heritage stays chosen for atmosphere, not for stars."],
+  [artisanHands, "Artisan hands at work", "Makers and workshops seen up close, never staged."],
+  [fortWalls, "Fort walls at golden hour", "Heritage walks timed for the light and the quiet."],
+  [backwaterDawn, "Backwaters at dawn", "Slow water, early mist, nothing on the schedule."],
+  [marketTexture, "Market colour and brass", "Markets explored with context and unhurried curiosity."],
 ] as const;
 
 const principles = [
@@ -139,13 +192,58 @@ function Stat({
   );
 }
 
+function Chapter({ chapter, flip }: { chapter: (typeof chapters)[number]; flip: boolean }) {
+  const reveal = useReveal<HTMLDivElement>();
+  return (
+    <div ref={reveal.ref} className={`${reveal.className} border-t border-ivory/10`}>
+      <div className="mx-auto grid max-w-[1440px] items-center gap-10 px-5 py-16 lg:grid-cols-12 lg:gap-16 lg:px-12 lg:py-24">
+        <figure
+          className={`zoom-frame group relative overflow-hidden lg:col-span-6 ${flip ? "slide-r lg:order-2" : "slide-l"}`}
+        >
+          <img
+            src={chapter.image}
+            alt={chapter.alt}
+            loading="lazy"
+            className="aspect-[4/3] w-full object-cover"
+          />
+          <span className="vignette opacity-60" aria-hidden="true" />
+          <span className="pointer-events-none absolute inset-4 border border-primary/0 transition-all duration-700 group-hover:inset-6 group-hover:border-primary/50" aria-hidden="true" />
+        </figure>
+        <div className={`lg:col-span-6 ${flip ? "slide-l lg:order-1" : "slide-r"}`}>
+          <div className="flex items-baseline gap-5">
+            <span className="font-serif text-[clamp(3rem,7vw,5.5rem)] leading-none text-primary/25">
+              {chapter.index}
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.22em] text-primary">{chapter.when}</span>
+          </div>
+          <h3 className="mt-4 max-w-[26ch] font-serif text-[clamp(1.9rem,3.4vw,3rem)] leading-[1.02] text-ivory">
+            {chapter.title}
+          </h3>
+          <div className="rule-draw gold-rule mt-6 h-px w-32" aria-hidden="true" />
+          <p className="mt-6 max-w-[52ch] leading-relaxed text-ivory/60">{chapter.body}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function NikhilLanding() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [progress, setProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
+  const [filter, setFilter] = useState<(typeof filters)[number]>("All journeys");
   const parallax = useParallax(0.16);
   const tiltRef = useTilt(6);
-  const rail = useAutoRail(journeys.length, 3800);
+
+  const visibleJourneys = useMemo(
+    () =>
+      filter === "All journeys"
+        ? journeys
+        : journeys.filter((journey) => journey.tags.some((tag) => tag === filter)),
+    [filter],
+  );
+  const rail = useAutoRail(visibleJourneys.length, 3800);
+  const active = visibleJourneys[Math.min(rail.index, visibleJourneys.length - 1)] ?? journeys[0];
 
   useEffect(() => {
     const onScroll = () => {
@@ -165,9 +263,9 @@ export function NikhilLanding() {
           <a href="#top" className="font-serif text-xl leading-none text-ivory transition-opacity hover:opacity-80 sm:text-2xl" aria-label="Nikhil Sharma, home">
             Nikhil<span className="text-primary"> Sharma</span>
           </a>
-          <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
+          <nav className="hidden items-center gap-6 xl:flex" aria-label="Main navigation">
             {navItems.map(([label, href]) => (
-              <a key={href} href={href} className="wipe-line text-[11px] uppercase tracking-[0.18em] text-ivory/60 transition-colors hover:text-primary">
+              <a key={href} href={href} className="wipe-line text-[11px] uppercase tracking-[0.16em] text-ivory/60 transition-colors hover:text-primary">
                 {label}
               </a>
             ))}
@@ -175,7 +273,7 @@ export function NikhilLanding() {
           <Button asChild className="fill-sweep hidden h-9 rounded-none border border-primary/60 bg-transparent px-4 text-[11px] uppercase tracking-[0.16em] text-primary shadow-none transition-colors hover:text-primary-foreground sm:inline-flex">
             <a href="#invitation">Speak with me</a>
           </Button>
-          <Button variant="ghost" size="icon" onClick={() => setMenuOpen((v) => !v)} className="text-ivory transition-transform hover:bg-ivory/10 hover:text-ivory active:scale-90 lg:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
+          <Button variant="ghost" size="icon" onClick={() => setMenuOpen((v) => !v)} className="text-ivory transition-transform hover:bg-ivory/10 hover:text-ivory active:scale-90 xl:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
             {menuOpen ? <X /> : <Menu />}
           </Button>
         </div>
@@ -183,7 +281,7 @@ export function NikhilLanding() {
           <div className="h-px bg-primary transition-[width] duration-150" style={{ width: `${progress * 100}%` }} />
         </div>
         {menuOpen ? (
-          <nav className="animate-fade-in border-t border-ivory/10 bg-background px-5 py-4 lg:hidden" aria-label="Mobile navigation">
+          <nav className="animate-fade-in border-t border-ivory/10 bg-background px-5 py-4 xl:hidden" aria-label="Mobile navigation">
             {navItems.map(([label, href]) => (
               <a key={href} href={href} onClick={() => setMenuOpen(false)} className="block border-b border-ivory/10 py-4 text-sm uppercase tracking-[0.18em] text-ivory/70 transition-colors hover:text-primary">
                 {label}
@@ -205,20 +303,23 @@ export function NikhilLanding() {
             style={{ transform: `translate3d(0, ${parallax}px, 0)` }}
           />
           <div className="absolute inset-0 bg-hero-scrim" aria-hidden="true" />
+          <span className="vignette" aria-hidden="true" />
+          <span className="grain" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 lg:min-h-[780px] lg:grid-cols-12 lg:px-12">
-            <div className="lg:col-span-7">
-              <p className="rise flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-primary">
+            <div className="relative lg:col-span-7">
+              <span className="glow-radial -left-24 -top-16 hidden size-[420px] lg:block" aria-hidden="true" />
+              <p className="rise relative flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-primary">
                 <span className="h-px w-10 bg-primary" /> Founder &amp; CEO, Elevated India
               </p>
-              <h1 className="mt-7 font-serif text-[clamp(2.8rem,7vw,6rem)] leading-[0.92] text-ivory">
+              <h1 className="relative mt-7 font-serif text-[clamp(2.8rem,7vw,6rem)] leading-[0.92] text-ivory">
                 <span className="rise rise-delay-1 block">Nikhil</span>
                 <span className="rise rise-delay-2 block italic text-primary">Sharma.</span>
               </h1>
-              <p className="rise rise-delay-3 mt-7 max-w-[46ch] text-base leading-relaxed text-ivory/75 sm:text-lg">
+              <p className="rise rise-delay-3 relative mt-7 max-w-[46ch] text-base leading-relaxed text-ivory/75 sm:text-lg">
                 I did not want to sell India. I wanted to run it — every guide, every mile, every night — so that a journey through this country could finally be lived the way I believe it deserves.
               </p>
-              <div className="rise rise-delay-4 mt-10 flex flex-wrap gap-3">
+              <div className="rise rise-delay-4 relative mt-10 flex flex-wrap gap-3">
                 <Button asChild className="h-12 rounded-none bg-primary px-6 text-xs uppercase tracking-[0.16em] text-primary-foreground transition-transform hover:-translate-y-0.5 hover:bg-ivory">
                   <a href="#story">My story</a>
                 </Button>
@@ -266,25 +367,23 @@ export function NikhilLanding() {
         </div>
 
         {/* My story */}
-        <Section id="story" className="bg-ivory text-ink">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
-            <div className="lg:col-span-4">
-              <p className="section-label">(a) My story</p>
-              <h2 className="mt-6 font-serif text-[clamp(2.4rem,4.6vw,4rem)] leading-[0.98]">
-                Most companies sell India. <span className="italic">I run it.</span>
+        <Section id="story" className="relative overflow-hidden bg-ivory text-ink">
+          <span className="paper-grid" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+            <div className="lg:col-span-5">
+              <p className="section-label">01 — My story</p>
+              <h2 className="line-rise mt-6 font-serif text-[clamp(2.4rem,4.6vw,4rem)] leading-[0.98]">
+                <span>Most companies</span>
+                <span>sell India.</span>
+                <span className="italic">I run it.</span>
               </h2>
-              <div className="rule-draw mt-8 h-px w-40 gold-rule" aria-hidden="true" />
-              <ol className="mt-10 space-y-6 border-l border-ink/15 pl-6">
-                {timeline.map(([when, what]) => (
-                  <li key={when} className="stagger group relative">
-                    <span className="absolute -left-[1.6rem] top-2 h-1.5 w-1.5 rounded-full bg-ink/25 transition-colors group-hover:bg-primary" aria-hidden="true" />
-                    <p className="text-[10px] uppercase tracking-[0.18em] text-ink/45 transition-colors group-hover:text-primary">{when}</p>
-                    <p className="mt-1 text-sm leading-relaxed text-ink/70">{what}</p>
-                  </li>
-                ))}
-              </ol>
+              <div className="rule-draw gold-rule mt-8 h-px w-40" aria-hidden="true" />
+              <blockquote className="mt-10 border-l border-primary pl-6 font-serif text-2xl leading-snug text-ink/80 sm:text-3xl">
+                “India is not a destination to be efficiently toured. It is an experience to be gradually, intimately and personally understood.”
+                <footer className="mt-4 text-[10px] uppercase tracking-[0.18em] text-ink/45">— Nikhil Sharma</footer>
+              </blockquote>
             </div>
-            <div className="lg:col-span-8">
+            <div className="lg:col-span-7">
               <p className="max-w-[60ch] text-lg leading-relaxed text-ink/70">
                 I have spent two decades on India’s roads. Long before I had a company, I was learning the country the slow way — its regions, its languages, the families who keep its crafts and kitchens and palaces alive. That apprenticeship is the whole of my work.
               </p>
@@ -294,10 +393,6 @@ export function NikhilLanding() {
               <p className="mt-6 max-w-[60ch] leading-relaxed text-ink/60">
                 So I built the opposite. My conviction is simple: you must own the ground you promise. If I tell you a morning will be unhurried and private, then the guide, the car and the room have to be mine to answer for. That single decision shaped everything that followed.
               </p>
-              <blockquote className="mt-10 border-l border-primary pl-6 font-serif text-2xl leading-snug text-ink/80 sm:text-3xl">
-                “India is not a destination to be efficiently toured. It is an experience to be gradually, intimately and personally understood.”
-                <footer className="mt-4 text-[10px] uppercase tracking-[0.18em] text-ink/45">— Nikhil Sharma</footer>
-              </blockquote>
               <div className="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
                 <Stat to={5} decimals={1} label="TripAdvisor rating" />
                 <Stat to={621} suffix="+" label="Traveller reviews" />
@@ -308,34 +403,64 @@ export function NikhilLanding() {
           </div>
         </Section>
 
+        {/* Chapters */}
+        <section id="chapters" className="relative overflow-hidden scroll-mt-16 bg-background">
+          <span className="grain" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 pt-24 lg:px-12 lg:pt-32">
+            <p className="section-label">02 — Chapters</p>
+            <h2 className="mt-6 max-w-[22ch] font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-[0.98] text-ivory">
+              How the work came <span className="italic text-primary">together.</span>
+            </h2>
+          </div>
+          <div className="relative mt-14">
+            {chapters.map((chapter, index) => (
+              <Chapter key={chapter.index} chapter={chapter} flip={index % 2 === 1} />
+            ))}
+          </div>
+        </section>
+
         {/* What I built */}
-        <Section id="company" className="bg-background text-ivory">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+        <Section id="company" className="relative overflow-hidden bg-ivory text-ink">
+          <span className="paper-grid" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
             <div className="lg:col-span-5">
-              <p className="section-label">(b) What I built</p>
+              <p className="section-label">03 — What I built</p>
               <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.2rem)] leading-none">
                 Elevated <span className="italic text-primary">India.</span>
               </h2>
-              <p className="mt-7 max-w-[46ch] leading-relaxed text-ivory/65">
+              <p className="mt-7 max-w-[46ch] leading-relaxed text-ink/70">
                 A private luxury travel house, not a package tour operator. Every itinerary is composed from scratch around your pace, your tastes and the occasion behind the trip — across India and Nepal.
               </p>
-              <p className="mt-5 max-w-[46ch] leading-relaxed text-ivory/55">
+              <p className="mt-5 max-w-[46ch] leading-relaxed text-ink/55">
                 I lead the company with my co-founder and director, Manu Singh, with ground operations running through India Personal Tours.
               </p>
-              <Button asChild variant="outline" className="fill-sweep group mt-9 h-12 rounded-none border-ivory/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ivory transition-colors hover:text-primary-foreground">
+              <div className="mt-10 grid gap-8 sm:grid-cols-3">
+                {principles.map(([title, body], index) => (
+                  <article key={title} className="stagger group border-t border-ink/15 pt-5 transition-colors hover:border-primary">
+                    <p className="font-serif text-2xl text-primary transition-transform duration-500 group-hover:-translate-y-1">0{index + 1}</p>
+                    <h3 className="mt-2 font-serif text-xl leading-tight">{title}</h3>
+                    <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
+                  </article>
+                ))}
+              </div>
+              <Button asChild variant="outline" className="fill-sweep group mt-10 h-12 rounded-none border-ink/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ink transition-colors hover:text-primary-foreground">
                 <a href={SITE} target="_blank" rel="noreferrer">
                   elevatedindia.com <ArrowUpRight className="transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
                 </a>
               </Button>
             </div>
             <div className="lg:col-span-7">
-              <div className="group relative aspect-[4/3] overflow-hidden">
-                <img src={desertFort} alt="A hilltop desert fort in Rajasthan at golden hour" className="h-full w-full object-cover transition-transform duration-[1400ms] ease-out group-hover:scale-105" loading="lazy" />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" aria-hidden="true" />
-              </div>
-              <div className="mt-8 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+              <figure className="zoom-frame group relative overflow-hidden">
+                <img src={desertFort} alt="A hilltop desert fort in Rajasthan at golden hour" className="aspect-[4/3] w-full object-cover" loading="lazy" />
+                <span className="vignette opacity-70" aria-hidden="true" />
+                <figcaption className="absolute inset-x-0 bottom-0 p-6 text-[11px] uppercase tracking-[0.18em] text-ivory/80">
+                  Rajasthan · a passage I compose most often
+                </figcaption>
+              </figure>
+              <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-ink/45">What I curate</p>
+              <div className="mt-4 grid gap-x-10 gap-y-4 sm:grid-cols-2">
                 {interests.map((item, index) => (
-                  <p key={item} className="stagger wipe-line group flex items-baseline gap-3 border-t border-ivory/15 pt-4 text-sm text-ivory/70 transition-colors hover:text-ivory">
+                  <p key={item} className="stagger wipe-line group flex items-baseline gap-3 border-t border-ink/15 pt-4 text-sm text-ink/70 transition-colors hover:text-ink">
                     <span className="font-serif text-primary transition-transform duration-300 group-hover:translate-x-0.5">0{index + 1}</span>
                     {item}
                   </p>
@@ -345,37 +470,13 @@ export function NikhilLanding() {
           </div>
         </Section>
 
-        {/* How I run it */}
-        <Section id="ground" className="bg-ivory text-ink">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
-            <div className="lg:col-span-4">
-              <p className="section-label">(c) How I run it</p>
-              <h2 className="mt-6 font-serif text-[clamp(2.3rem,4.5vw,3.8rem)] leading-none">
-                Privately designed. Personally run.
-              </h2>
-              <p className="mt-6 max-w-sm leading-relaxed text-ink/60">
-                I keep the licensed guides, the chauffeured fleet and a 24/7 control room in-house, on every mile. That is the single fact that keeps a journey unhurried, seamless and discreet.
-              </p>
-              <div className="rule-draw mt-8 h-px w-40 gold-rule" aria-hidden="true" />
-            </div>
-            <div className="grid gap-10 sm:grid-cols-3 lg:col-span-8">
-              {principles.map(([title, body], index) => (
-                <article key={title} className="stagger group border-t border-ink/15 pt-5 transition-colors hover:border-primary">
-                  <p className="font-serif text-2xl text-primary transition-transform duration-500 group-hover:-translate-y-1">0{index + 1}</p>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight">{title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </Section>
-
         {/* Journeys */}
         <Section id="journeys" className="relative overflow-hidden bg-ink text-ivory">
           <img src={paperTexture} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.05]" loading="lazy" />
+          <span className="grain" aria-hidden="true" />
           <div className="relative py-24 lg:py-32">
             <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-              <p className="section-label">(d) The journeys I curate</p>
+              <p className="section-label">04 — The journeys I curate</p>
               <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
                 Journeys of rare <span className="italic text-primary">distinction.</span>
               </h2>
@@ -384,7 +485,7 @@ export function NikhilLanding() {
                   A few of the flagship itineraries I compose most often. Each one is a living journey — not a package, but a carefully composed narrative.
                 </p>
                 <div className="flex items-center gap-3">
-                  <span className="flex items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-ivory/40">
+                  <span className="hidden items-center gap-2 text-[10px] uppercase tracking-[0.18em] text-ivory/40 sm:flex">
                     <MoveHorizontal className="size-4 text-primary" aria-hidden="true" /> Drag to explore
                   </span>
                   <Button variant="outline" size="icon" onClick={rail.prev} aria-label="Previous journey" className="size-10 rounded-none border-ivory/25 bg-transparent text-ivory hover:bg-primary hover:text-primary-foreground">
@@ -395,15 +496,49 @@ export function NikhilLanding() {
                   </Button>
                 </div>
               </div>
+
+              {/* filter chips */}
+              <div className="mt-10 flex flex-wrap gap-2" role="group" aria-label="Filter journeys">
+                {filters.map((item) => (
+                  <button
+                    key={item}
+                    type="button"
+                    onClick={() => {
+                      setFilter(item);
+                      rail.scrollTo(0);
+                    }}
+                    aria-pressed={filter === item}
+                    className={`border px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
+                      filter === item
+                        ? "border-primary bg-primary text-primary-foreground"
+                        : "border-ivory/20 text-ivory/55 hover:-translate-y-0.5 hover:border-primary/60 hover:text-primary"
+                    }`}
+                  >
+                    {item}
+                  </button>
+                ))}
+              </div>
+
+              {/* active journey preview */}
+              <div className="mt-8 grid items-end gap-4 border-t border-ivory/10 pt-6 sm:grid-cols-[1fr_auto]">
+                <div>
+                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{active.region}</p>
+                  <p className="mt-2 font-serif text-2xl leading-tight text-ivory sm:text-3xl">{active.title}</p>
+                </div>
+                <p className="text-[10px] uppercase tracking-[0.2em] text-ivory/45">
+                  {active.days} · {rail.index + 1} of {visibleJourneys.length}
+                </p>
+              </div>
             </div>
+
             <div
               ref={rail.ref}
               {...rail.pauseHandlers}
-              className="venture-scroll mt-12 flex snap-x gap-5 overflow-x-auto px-5 pb-8 lg:px-12"
+              className="venture-scroll mt-10 flex snap-x gap-5 overflow-x-auto px-5 pb-8 lg:px-12"
             >
-              {journeys.map((journey) => (
-                <article key={journey.title} className="group relative h-[460px] w-[80vw] shrink-0 snap-start overflow-hidden transition-transform duration-500 hover:-translate-y-2 sm:w-[340px]">
-                  <img src={journey.image} alt={journey.title} className="absolute inset-0 h-full w-full object-cover transition-transform duration-[1200ms] ease-out group-hover:scale-110" loading="lazy" />
+              {visibleJourneys.map((journey) => (
+                <article key={journey.title} className="zoom-frame group relative h-[460px] w-[80vw] shrink-0 snap-start overflow-hidden transition-transform duration-500 hover:-translate-y-2 sm:w-[340px]">
+                  <img src={journey.image} alt={journey.title} className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/45 to-transparent" aria-hidden="true" />
                   <span className="pointer-events-none absolute inset-3 border border-primary/0 transition-all duration-500 group-hover:inset-4 group-hover:border-primary/70" aria-hidden="true" />
                   <div className="absolute inset-x-0 top-0 flex items-center justify-between gap-2 p-4">
@@ -419,49 +554,103 @@ export function NikhilLanding() {
                 </article>
               ))}
             </div>
+
             <div className="mx-auto flex max-w-[1440px] flex-wrap items-center justify-between gap-6 px-5 lg:px-12">
               <a href={SITE} target="_blank" rel="noreferrer" className="group inline-flex items-center gap-2 border-b border-primary pb-1 text-xs uppercase tracking-[0.16em] text-ivory transition-colors hover:text-primary">
                 View all journeys <ArrowUpRight className="size-4 transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1" />
               </a>
-              <div className="flex items-center gap-2" role="tablist" aria-label="Journey slides">
-                {journeys.map((journey, index) => (
-                  <button
-                    key={journey.title}
-                    type="button"
-                    role="tab"
-                    aria-selected={rail.index === index}
-                    aria-label={journey.title}
-                    onClick={() => rail.scrollTo(index)}
-                    className={`h-px transition-all duration-500 ${rail.index === index ? "w-10 bg-primary" : "w-5 bg-ivory/25 hover:bg-ivory/60"}`}
-                  />
-                ))}
+              <div className="flex h-px w-40 items-center bg-ivory/15" aria-hidden="true">
+                <span
+                  className="h-px bg-primary transition-all duration-500"
+                  style={{ width: `${((rail.index + 1) / Math.max(1, visibleJourneys.length)) * 100}%` }}
+                />
               </div>
             </div>
           </div>
         </Section>
 
+        {/* Field notes gallery */}
+        <Section id="gallery" className="relative overflow-hidden bg-background">
+          <div className="relative pt-24 lg:pt-32">
+            <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
+              <p className="section-label">05 — Field notes</p>
+              <h2 className="mt-6 max-w-[24ch] font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-[0.98] text-ivory">
+                Frames from the road I <span className="italic text-primary">keep returning to.</span>
+              </h2>
+            </div>
+            <div className="drift-pause mt-14 space-y-4 pb-24 lg:pb-32">
+              {[0, 1].map((row) => (
+                <div key={row} className="marquee-mask overflow-hidden">
+                  <div className={`drift-row gap-4 ${row === 1 ? "drift-row-reverse" : ""}`}>
+                    {[...gallery, ...gallery].map(([image, alt, caption], index) => (
+                      <figure
+                        key={`${alt}-${row}-${index}`}
+                        className="zoom-frame group relative h-56 w-[260px] shrink-0 overflow-hidden sm:h-72 sm:w-[360px]"
+                      >
+                        <img src={image} alt={alt} loading="lazy" className="h-full w-full object-cover" />
+                        <span className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/10 to-transparent" aria-hidden="true" />
+                        <figcaption className="absolute inset-x-0 bottom-0 p-5 text-[11px] leading-relaxed text-ivory/85">
+                          {caption}
+                        </figcaption>
+                      </figure>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* Reach */}
+        <Section className="relative overflow-hidden bg-ivory text-ink">
+          <span className="paper-grid" aria-hidden="true" />
+          <div className="relative mx-auto grid max-w-[1440px] gap-12 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-28">
+            <div className="lg:col-span-5">
+              <p className="section-label">06 — Where it stands</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.2rem,4.2vw,3.6rem)] leading-[1] ">
+                Judged by the people who <span className="italic">travelled with us.</span>
+              </h2>
+              <div className="rule-draw gold-rule mt-8 h-px w-40" aria-hidden="true" />
+            </div>
+            <div className="grid gap-8 sm:grid-cols-2 lg:col-span-7">
+              {[
+                ["5.0 on TripAdvisor", "Across 621+ traveller reviews of the journeys we run."],
+                ["IATO member", "Member of the Indian Association of Tour Operators."],
+                ["Ministry of Tourism", "Recognised by the Ministry of Tourism, Government of India."],
+                ["India & Nepal", "The ground I operate across, with my own guides and fleet."],
+              ].map(([title, body]) => (
+                <article key={title} className="stagger group border-t border-ink/15 pt-5 transition-colors hover:border-primary">
+                  <h3 className="font-serif text-2xl leading-tight transition-transform duration-500 group-hover:-translate-y-0.5">{title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Section>
+
         {/* Recognition */}
-        <Section id="recognition" className="bg-background text-ivory">
-          <div className="mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
-            <p className="section-label">(e) Recognition</p>
+        <Section id="recognition" className="relative overflow-hidden bg-background text-ivory">
+          <span className="grain" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <p className="section-label">07 — Recognition</p>
             <div className="mt-6 grid items-center gap-12 lg:grid-cols-12">
               <div className="lg:col-span-6">
                 <h2 className="font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
                   Excellence in curated <span className="italic text-primary">luxury travel.</span>
                 </h2>
-                <div className="rule-draw mt-8 h-px w-40 gold-rule" aria-hidden="true" />
+                <div className="rule-draw gold-rule mt-8 h-px w-40" aria-hidden="true" />
                 <p className="mt-8 max-w-[52ch] leading-relaxed text-ivory/65">
                   My company was awarded at the ET NOW.IN Business Conclave &amp; Awards 2026, West Edition — Mumbai, 25 August 2026.
                 </p>
               </div>
               <div className="lg:col-span-6">
-                <div className="group relative overflow-hidden border border-ivory/15 bg-ivory/[0.03] p-8 backdrop-blur-sm transition-colors duration-500 hover:border-primary/50 sm:p-12">
+                <div className="foil group relative overflow-hidden border border-ivory/15 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-primary/60 sm:p-12">
                   <span className="sheen" aria-hidden="true" />
                   <Award className="size-8 text-primary transition-transform duration-500 group-hover:scale-110" aria-hidden="true" />
                   <p className="mt-6 font-serif text-3xl leading-tight sm:text-4xl">
                     Excellence in Curated Luxury Travel Experiences
                   </p>
-                  <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ivory/45">
+                  <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ivory/50">
                     ET NOW.IN Business Conclave &amp; Awards 2026 · West Edition · Mumbai
                   </p>
                 </div>
@@ -472,8 +661,10 @@ export function NikhilLanding() {
 
         {/* Invitation */}
         <Section id="invitation" className="relative overflow-hidden">
-          <img src={backwatersGold} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
+          <img src={backwaterDawn} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-background/85" aria-hidden="true" />
+          <span className="vignette" aria-hidden="true" />
+          <span className="grain" aria-hidden="true" />
           <div className="relative mx-auto max-w-[1440px] px-5 py-28 text-center lg:px-12 lg:py-36">
             <p className="section-label">An invitation</p>
             <h2 className="mx-auto mt-6 max-w-4xl font-serif text-[clamp(2.6rem,6vw,5.4rem)] leading-[0.94] text-ivory">
