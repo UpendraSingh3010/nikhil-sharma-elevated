@@ -28,20 +28,20 @@ The selected image approach is a **mix of official Elevated India material and n
 - Use editorial captions rather than generic stock-photo labels.
 
 ### 4. Add verified guest reviews
-- Source exact public reviews from an authoritative Elevated India profile or public review listing.
-- Show a small curated review sequence with exact wording, reviewer attribution, platform, and source link.
-- Add an auto-advancing quote transition, progress indicator, and manual previous/next controls; pause while hovered, focused, or touched.
-- If exact review text or attribution cannot be verified, keep the existing aggregate rating and review count instead of inventing testimonials.
+- The official site confirms **5.0 on TripAdvisor · 621+ reviews** and links to the India Personal Tours TripAdvisor listing, but it does not publish named guest quotes and TripAdvisor does not allow reliable automated verification.
+- Build a premium “Guest confidence” sequence around that verified aggregate record, IATO membership, Ministry of Tourism recognition, owned fleet, and 24/7 control room rather than fabricating testimonial cards.
+- Add an auto-advancing transition, progress indicator, and manual previous/next controls; pause while hovered, focused, or touched.
+- Structure the section so exact attributed reviews can be added later if Nikhil supplies or approves them.
 
 ### 5. Add signature experiences
 - Introduce an interactive “Signature experiences” section focused on how Nikhil’s travel philosophy becomes a real day on the ground.
-- Use verified experience categories such as palace access, private wildlife safaris, artisan encounters, sacred rituals, culinary encounters, and family journeys.
+- Use official experience material such as a private Kerala houseboat cruise, private tiger safari, Ganga Aarti from the water, Kathakali in Fort Kochi, an Old Delhi heritage walk, Jaipur artisan workshops, Munnar tea estates, and a Thekkady spice walk.
 - Give every experience a unique image, concise factual description, region/context, and link to the relevant official Elevated India page.
 - Present it as a changing cinematic stage with a selectable index, not another grid of repetitive cards.
 
 ### 6. Expand festivals and seasonal India
 - Replace the current three repeated-image seasonal cards with a richer festival calendar using unique photography.
-- Include only dates and descriptions confirmed by reliable current sources; distinguish fixed 2026 dates from evergreen seasonal guidance.
+- Include confirmed dates for Diwali 2026 (8 November), Pushkar Camel Fair 2026 (17–24 November), Holi 2027 (23 March), and Hemis Festival 2027 (13–14 July), alongside clearly labeled evergreen seasonal guidance.
 - Present festivals as moments worth planning around, not as guaranteed availability.
 - Add a horizontal date line, animated active marker, and expandable festival details linking outward for itinerary enquiries.
 
@@ -57,6 +57,7 @@ The selected image approach is a **mix of official Elevated India material and n
 - Reviews will be quoted exactly and linked to their public source.
 - No invented customer names, review text, festival dates, access promises, awards, destinations, or outcomes.
 - Official photography will be stored locally through the project asset flow; no external image hotlinking.
+- Because the official website does not publish reuse permission for its photographs, use only clearly licensed official-linked imagery with proper attribution; otherwise create an original image rather than copying a protected photograph.
 - Generated images will never depict Nikhil or imply that generated travellers are identifiable real customers.
 
 ## Technical details
