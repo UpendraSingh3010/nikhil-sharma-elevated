@@ -503,7 +503,10 @@ export function NikhilLanding() {
                   <button
                     key={item}
                     type="button"
-                    onClick={() => setFilter(item)}
+                    onClick={() => {
+                      setFilter(item);
+                      rail.scrollTo(0);
+                    }}
                     aria-pressed={filter === item}
                     className={`border px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
                       filter === item
