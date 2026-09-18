@@ -176,6 +176,14 @@ const principles = [
     "Complete discretion",
     "Privacy is my first principle. I run the company with the discretion of a private household, not a public business.",
   ],
+  [
+    "A considered pace",
+    "The day needs enough air for a conversation, an unexpected doorway and the pleasure of not watching the clock.",
+  ],
+  [
+    "Personal accountability",
+    "The promise carries my name. I stay answerable for how it is designed, how it runs and how it feels on the ground.",
+  ],
 ] as const;
 
 function Section({
@@ -347,6 +355,8 @@ export function NikhilLanding() {
           <div className="absolute inset-0 bg-hero-scrim" aria-hidden="true" />
           <span className="vignette" aria-hidden="true" />
           <span className="grain" aria-hidden="true" />
+           <span className="route-orbit route-orbit-one" aria-hidden="true" />
+           <span className="route-orbit route-orbit-two" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 lg:min-h-[780px] lg:grid-cols-12 lg:px-12">
             <div className="relative lg:col-span-7">
