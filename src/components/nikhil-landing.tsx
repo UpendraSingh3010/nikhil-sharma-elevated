@@ -13,10 +13,10 @@ import paperTexture from "@/assets/elevated/paper-texture.jpg";
 const SITE = "https://www.elevatedindia.com/";
 
 const navItems = [
-  ["Founder", "#founder"],
-  ["What we curate", "#curate"],
+  ["My story", "#story"],
+  ["Elevated India", "#company"],
+  ["How I run it", "#ground"],
   ["Journeys", "#journeys"],
-  ["How we run it", "#ground"],
   ["Recognition", "#recognition"],
 ] as const;
 
@@ -30,12 +30,12 @@ const credentials = [
 ] as const;
 
 const interests = [
-  ["Royal Residences & Palace Life", "Heritage · Maharaja estates · Haveli stays"],
-  ["Wilderness & Private Safaris", "Wildlife · Jungle camps · Tiger reserves"],
-  ["Spiritual & Transformational", "Varanasi · Ashrams · Sacred rivers"],
-  ["Art, Design & Culture", "Craft · Architecture · Living traditions"],
-  ["Celebrations & Private Events", "Weddings · Milestones · Bespoke occasions"],
-  ["Family & Multi-Generational", "Luxury · Discovery · Shared memory"],
+  "Royal residences & palace life",
+  "Wilderness & private safaris",
+  "Spiritual & transformational",
+  "Art, design & culture",
+  "Celebrations & private events",
+  "Family & multi-generational",
 ] as const;
 
 const journeys = [
@@ -76,15 +76,15 @@ const journeys = [
 const principles = [
   [
     "Deep local intelligence",
-    "Decades of intimate knowledge across India’s regions, cultures and communities — insights no algorithm can replicate.",
+    "I have spent two decades building intimate knowledge of India’s regions, cultures and communities — insight no algorithm can replicate.",
   ],
   [
     "Curated, not crowded",
-    "Every element is hand-selected. Fewer choices, better choices, tailored precisely to your intent and sensibility.",
+    "I hand-select every element myself. Fewer choices, better choices, tailored precisely to your intent and sensibility.",
   ],
   [
     "Complete discretion",
-    "Privacy is our first principle. We operate with the discretion of a private household, not a public business.",
+    "Privacy is my first principle. I run the company with the discretion of a private household, not a public business.",
   ],
 ] as const;
 
@@ -125,8 +125,8 @@ export function NikhilLanding() {
     <div className="min-h-screen overflow-x-hidden bg-background font-sans text-foreground selection:bg-primary selection:text-primary-foreground">
       <header className="fixed inset-x-0 top-0 z-50 border-b border-ivory/10 bg-background/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between px-5 lg:px-12">
-          <a href="#top" className="font-serif text-xl leading-none text-ivory sm:text-2xl" aria-label="Elevated India, home">
-            Elevated<span className="text-primary"> India</span>
+          <a href="#top" className="font-serif text-xl leading-none text-ivory sm:text-2xl" aria-label="Nikhil Sharma, home">
+            Nikhil<span className="text-primary"> Sharma</span>
           </a>
           <nav className="hidden items-center gap-7 lg:flex" aria-label="Main navigation">
             {navItems.map(([label, href]) => (
@@ -136,7 +136,7 @@ export function NikhilLanding() {
             ))}
           </nav>
           <Button asChild className="hidden h-9 rounded-none border border-primary/60 bg-transparent px-4 text-[11px] uppercase tracking-[0.16em] text-primary shadow-none hover:bg-primary hover:text-primary-foreground sm:inline-flex">
-            <a href="#invitation">Speak with a curator</a>
+            <a href="#invitation">Speak with me</a>
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setMenuOpen((v) => !v)} className="text-ivory hover:bg-ivory/10 hover:text-ivory lg:hidden" aria-label={menuOpen ? "Close menu" : "Open menu"} aria-expanded={menuOpen}>
             {menuOpen ? <X /> : <Menu />}
@@ -158,30 +158,38 @@ export function NikhilLanding() {
 
       <main id="top">
         {/* Opening */}
-        <section className="relative min-h-[680px] overflow-hidden pt-16 lg:min-h-[780px]">
+        <section className="relative overflow-hidden pt-16">
           <img src={palaceDusk} alt="Lantern-lit palace courtyard at dusk in India" width={1920} height={1200} className="absolute inset-0 h-full w-full object-cover" />
           <div className="absolute inset-0 bg-hero-scrim" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
-          <div className="relative mx-auto flex min-h-[calc(100vh-4rem)] max-w-[1440px] items-center px-5 py-20 lg:min-h-[780px] lg:px-12">
-            <div className="max-w-3xl">
+          <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 lg:min-h-[760px] lg:grid-cols-12 lg:px-12">
+            <div className="lg:col-span-7">
               <p className="rise flex items-center gap-3 text-[11px] uppercase tracking-[0.24em] text-primary">
-                <span className="h-px w-10 bg-primary" /> Curators of Extraordinary India
+                <span className="h-px w-10 bg-primary" /> Founder &amp; CEO, Elevated India
               </p>
-              <h1 className="rise rise-delay-1 mt-7 font-serif text-[clamp(3rem,8vw,7rem)] leading-[0.9] text-ivory">
-                Elevated <span className="italic text-primary">India.</span>
+              <h1 className="rise rise-delay-1 mt-7 font-serif text-[clamp(2.8rem,7vw,6rem)] leading-[0.92] text-ivory">
+                Nikhil <span className="italic text-primary">Sharma.</span>
               </h1>
               <p className="rise rise-delay-2 mt-7 max-w-[46ch] text-base leading-relaxed text-ivory/75 sm:text-lg">
-                Bespoke journeys crafted with rare access, cultural depth and uncompromising discretion — across India and Nepal.
+                I did not want to sell India. I wanted to run it — every guide, every mile, every night — so that a journey through this country could finally be lived the way I believe it deserves.
               </p>
               <div className="rise rise-delay-3 mt-10 flex flex-wrap gap-3">
                 <Button asChild className="h-12 rounded-none bg-primary px-6 text-xs uppercase tracking-[0.16em] text-primary-foreground hover:bg-ivory">
-                  <a href="#journeys">Explore private journeys</a>
+                  <a href="#story">My story</a>
                 </Button>
                 <Button asChild variant="outline" className="h-12 rounded-none border-ivory/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ivory hover:bg-ivory hover:text-ink">
-                  <a href="#invitation">Speak with a journey curator</a>
+                  <a href="#company">Elevated India</a>
                 </Button>
               </div>
             </div>
+            <figure className="rise rise-delay-2 relative lg:col-span-5">
+              <div className="aspect-[4/5] overflow-hidden border border-ivory/15 bg-ink/40 backdrop-blur-sm">
+                <img src={portrait} alt="Nikhil Sharma, Founder and CEO of Elevated India" className="h-full w-full object-cover object-[68%_center]" />
+              </div>
+              <figcaption className="mt-3 text-[10px] uppercase tracking-[0.16em] text-ivory/45">
+                Nikhil Sharma · Founder &amp; CEO, Elevated India
+              </figcaption>
+            </figure>
           </div>
         </section>
 
@@ -197,71 +205,106 @@ export function NikhilLanding() {
           </div>
         </div>
 
-        {/* Founder */}
-        <Section id="founder" className="bg-ivory text-ink" >
+        {/* My story */}
+        <Section id="story" className="bg-ivory text-ink">
           <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
-            <figure className="lg:col-span-5">
-              <div className="aspect-[4/5] overflow-hidden bg-paper">
-                <img src={portrait} alt="Nikhil Sharma, Founder and CEO of Elevated India" className="h-full w-full object-cover object-[68%_center]" loading="lazy" />
-              </div>
-              <figcaption className="mt-3 text-[10px] uppercase tracking-[0.16em] text-ink/45">Nikhil Sharma · Founder & CEO</figcaption>
-            </figure>
-            <div className="lg:col-span-7">
-              <p className="section-label">(a) The founder</p>
-              <h2 className="mt-6 font-serif text-[clamp(2.5rem,5vw,4.6rem)] leading-[0.98]">
-                Most companies sell India. <span className="italic">We run it.</span>
+            <div className="lg:col-span-4">
+              <p className="section-label">(a) My story</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.4rem,4.6vw,4rem)] leading-[0.98]">
+                Most companies sell India. <span className="italic">I run it.</span>
               </h2>
-              <p className="mt-8 max-w-[58ch] text-lg leading-relaxed text-ink/70">
-                Elevated India was founded by Nikhil Sharma as a private luxury travel house — not a package tour operator. Every itinerary is composed from scratch around your pace, your tastes and the occasion behind the trip.
+              <div className="mt-8 h-px w-40 gold-rule" aria-hidden="true" />
+            </div>
+            <div className="lg:col-span-8">
+              <p className="max-w-[60ch] text-lg leading-relaxed text-ink/70">
+                I have spent two decades on India’s roads. Long before I had a company, I was learning the country the slow way — its regions, its languages, the families who keep its crafts and kitchens and palaces alive. That apprenticeship is the whole of my work.
               </p>
-              <p className="mt-5 max-w-[58ch] leading-relaxed text-ink/60">
-                His conviction shapes the whole company: run the ground yourself. Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile, rather than handing guests to third parties. Elevated India is led with co-founder and director Manu Singh, with ground operations through India Personal Tours.
+              <p className="mt-6 max-w-[60ch] leading-relaxed text-ink/60">
+                What I kept seeing was the same thing: travellers arriving with real curiosity and being handed a package. Fixed routes, rented vehicles, borrowed guides, a promise made by one company and kept — or not kept — by another. I refused to build that.
               </p>
-              <blockquote className="mt-9 border-l border-primary pl-6 font-serif text-2xl leading-snug text-ink/80 sm:text-3xl">
+              <p className="mt-6 max-w-[60ch] leading-relaxed text-ink/60">
+                So I built the opposite. My conviction is simple: you must own the ground you promise. If I tell you a morning will be unhurried and private, then the guide, the car and the room have to be mine to answer for. That single decision shaped everything that followed.
+              </p>
+              <blockquote className="mt-10 border-l border-primary pl-6 font-serif text-2xl leading-snug text-ink/80 sm:text-3xl">
                 “India is not a destination to be efficiently toured. It is an experience to be gradually, intimately and personally understood.”
-                <footer className="mt-4 text-[10px] uppercase tracking-[0.18em] text-ink/45">— The Elevated India philosophy</footer>
+                <footer className="mt-4 text-[10px] uppercase tracking-[0.18em] text-ink/45">— Nikhil Sharma</footer>
               </blockquote>
             </div>
           </div>
         </Section>
 
-        {/* What we curate */}
-        <Section id="curate" className="bg-background text-ivory">
-          <div className="mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
-            <div className="flex flex-wrap items-end justify-between gap-8">
-              <div>
-                <p className="section-label">(b) What we curate</p>
-                <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
-                  The shape of <span className="italic text-primary">your journey.</span>
-                </h2>
+        {/* What I built */}
+        <Section id="company" className="bg-background text-ivory">
+          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+            <div className="lg:col-span-5">
+              <p className="section-label">(b) What I built</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.2rem)] leading-none">
+                Elevated <span className="italic text-primary">India.</span>
+              </h2>
+              <p className="mt-7 max-w-[46ch] leading-relaxed text-ivory/65">
+                A private luxury travel house, not a package tour operator. Every itinerary is composed from scratch around your pace, your tastes and the occasion behind the trip — across India and Nepal.
+              </p>
+              <p className="mt-5 max-w-[46ch] leading-relaxed text-ivory/55">
+                I lead the company with my co-founder and director, Manu Singh, with ground operations running through India Personal Tours.
+              </p>
+              <Button asChild variant="outline" className="mt-9 h-12 rounded-none border-ivory/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ivory hover:bg-primary hover:text-primary-foreground">
+                <a href={SITE} target="_blank" rel="noreferrer">
+                  elevatedindia.com <ArrowUpRight />
+                </a>
+              </Button>
+            </div>
+            <div className="lg:col-span-7">
+              <div className="relative aspect-[4/3] overflow-hidden">
+                <img src={desertFort} alt="A hilltop desert fort in Rajasthan at golden hour" className="h-full w-full object-cover" loading="lazy" />
+                <div className="absolute inset-0 bg-gradient-to-t from-background/70 to-transparent" aria-hidden="true" />
               </div>
-              <p className="max-w-sm text-sm leading-relaxed text-ivory/55">
-                We begin not with destinations, but with desire. What draws you — stillness or ceremony, wilderness or opulence, spirit or celebration?
+              <div className="mt-8 grid gap-x-10 gap-y-4 sm:grid-cols-2">
+                {interests.map((item, index) => (
+                  <p key={item} className="flex items-baseline gap-3 border-t border-ivory/15 pt-4 text-sm text-ivory/70">
+                    <span className="font-serif text-primary">0{index + 1}</span>
+                    {item}
+                  </p>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* How I run it */}
+        <Section id="ground" className="bg-ivory text-ink">
+          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
+            <div className="lg:col-span-4">
+              <p className="section-label">(c) How I run it</p>
+              <h2 className="mt-6 font-serif text-[clamp(2.3rem,4.5vw,3.8rem)] leading-none">
+                Privately designed. Personally run.
+              </h2>
+              <p className="mt-6 max-w-sm leading-relaxed text-ink/60">
+                I keep the licensed guides, the chauffeured fleet and a 24/7 control room in-house, on every mile. That is the single fact that keeps a journey unhurried, seamless and discreet.
               </p>
             </div>
-            <div className="mt-14 grid gap-x-12 gap-y-10 sm:grid-cols-2 lg:grid-cols-3">
-              {interests.map(([title, detail], index) => (
-                <article key={title} className="group border-t border-ivory/15 pt-5 transition-colors hover:border-primary">
-                  <p className="font-serif text-lg text-primary">0{index + 1}</p>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight sm:text-3xl">{title}</h3>
-                  <p className="mt-3 text-xs uppercase tracking-[0.14em] text-ivory/45">{detail}</p>
+            <div className="grid gap-10 sm:grid-cols-3 lg:col-span-8">
+              {principles.map(([title, body], index) => (
+                <article key={title} className="border-t border-ink/15 pt-5">
+                  <p className="font-serif text-2xl text-primary">0{index + 1}</p>
+                  <h3 className="mt-2 font-serif text-2xl leading-tight">{title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
                 </article>
               ))}
             </div>
           </div>
         </Section>
 
-        {/* Signature journeys */}
+        {/* Journeys */}
         <Section id="journeys" className="relative overflow-hidden bg-ink text-ivory">
           <img src={paperTexture} alt="" aria-hidden="true" className="pointer-events-none absolute inset-0 h-full w-full object-cover opacity-[0.05]" loading="lazy" />
           <div className="relative py-24 lg:py-32">
             <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-              <p className="section-label">(c) Our signatures</p>
+              <p className="section-label">(d) The journeys I curate</p>
               <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
                 Journeys of rare <span className="italic text-primary">distinction.</span>
               </h2>
               <p className="mt-6 max-w-lg text-sm leading-relaxed text-ivory/55">
-                A curated selection of flagship itineraries. Each one a living journey — not a package, but a carefully composed narrative.
+                A few of the flagship itineraries I compose most often. Each one is a living journey — not a package, but a carefully composed narrative.
               </p>
             </div>
             <div className="venture-scroll mt-12 flex snap-x gap-5 overflow-x-auto px-5 pb-8 lg:px-12">
@@ -290,30 +333,6 @@ export function NikhilLanding() {
           </div>
         </Section>
 
-        {/* How we run it */}
-        <Section id="ground" className="bg-ivory text-ink">
-          <div className="mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
-            <div className="lg:col-span-4">
-              <p className="section-label">(d) How we run it</p>
-              <h2 className="mt-6 font-serif text-[clamp(2.3rem,4.5vw,3.8rem)] leading-none">
-                Privately designed. Personally run.
-              </h2>
-              <p className="mt-6 max-w-sm leading-relaxed text-ink/60">
-                Licensed guides, an owned chauffeured fleet and a 24/7 control room on every mile — the single fact that keeps a journey unhurried, seamless and discreet.
-              </p>
-            </div>
-            <div className="grid gap-10 sm:grid-cols-3 lg:col-span-8">
-              {principles.map(([title, body], index) => (
-                <article key={title} className="border-t border-ink/15 pt-5">
-                  <p className="font-serif text-2xl text-primary">0{index + 1}</p>
-                  <h3 className="mt-2 font-serif text-2xl leading-tight">{title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
-                </article>
-              ))}
-            </div>
-          </div>
-        </Section>
-
         {/* Recognition */}
         <Section id="recognition" className="bg-background text-ivory">
           <div className="mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
@@ -325,7 +344,7 @@ export function NikhilLanding() {
                 </h2>
                 <div className="mt-8 h-px w-40 gold-rule" aria-hidden="true" />
                 <p className="mt-8 max-w-[52ch] leading-relaxed text-ivory/65">
-                  Awarded to Elevated India at the ET NOW.IN Business Conclave & Awards 2026, West Edition — Mumbai, 25 August 2026.
+                  My company was awarded at the ET NOW.IN Business Conclave &amp; Awards 2026, West Edition — Mumbai, 25 August 2026.
                 </p>
               </div>
               <div className="lg:col-span-6">
@@ -335,7 +354,7 @@ export function NikhilLanding() {
                     Excellence in Curated Luxury Travel Experiences
                   </p>
                   <p className="mt-4 text-[11px] uppercase tracking-[0.18em] text-ivory/45">
-                    ET NOW.IN Business Conclave & Awards 2026 · West Edition · Mumbai
+                    ET NOW.IN Business Conclave &amp; Awards 2026 · West Edition · Mumbai
                   </p>
                 </div>
               </div>
@@ -348,12 +367,12 @@ export function NikhilLanding() {
           <img src={backwatersGold} alt="" aria-hidden="true" className="absolute inset-0 h-full w-full object-cover" loading="lazy" />
           <div className="absolute inset-0 bg-background/85" aria-hidden="true" />
           <div className="relative mx-auto max-w-[1440px] px-5 py-28 text-center lg:px-12 lg:py-36">
-            <p className="section-label">Three questions → your journey</p>
+            <p className="section-label">An invitation</p>
             <h2 className="mx-auto mt-6 max-w-4xl font-serif text-[clamp(2.6rem,6vw,5.4rem)] leading-[0.94] text-ivory">
-              Where will India <span className="italic text-primary">take you?</span>
+              Let me show you <span className="italic text-primary">my India.</span>
             </h2>
             <p className="mx-auto mt-7 max-w-xl leading-relaxed text-ivory/65">
-              Begin with a conversation. A journey curator will compose something entirely your own, from the first idea to the last mile.
+              Begin with a conversation. My team and I will compose something entirely your own, from the first idea to the last mile.
             </p>
             <Button asChild className="mt-10 h-12 rounded-none bg-primary px-8 text-xs uppercase tracking-[0.16em] text-primary-foreground hover:bg-ivory">
               <a href={SITE} target="_blank" rel="noreferrer">
@@ -366,7 +385,7 @@ export function NikhilLanding() {
 
       <footer className="border-t border-ivory/10 bg-background text-ivory/40">
         <div className="mx-auto flex max-w-[1440px] flex-col gap-2 px-5 py-7 text-[10px] uppercase tracking-[0.14em] sm:flex-row sm:justify-between lg:px-12">
-          <span>Elevated India · Nikhil Sharma, Founder & CEO</span>
+          <span>Nikhil Sharma · Founder &amp; CEO, Elevated India</span>
           <span>Independent tribute concept · 2026</span>
         </div>
       </footer>
