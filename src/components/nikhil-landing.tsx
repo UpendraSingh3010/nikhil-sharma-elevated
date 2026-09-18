@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Menu, MoveHorizontal, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Building2, Check, Compass, Menu, MoveHorizontal, ShieldCheck, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,8 @@ import artisanHands from "@/assets/elevated/artisan-hands.jpg";
 import palaceNight from "@/assets/elevated/palace-night.jpg";
 import backwaterDawn from "@/assets/elevated/backwater-dawn.jpg";
 import marketTexture from "@/assets/elevated/market-texture.jpg";
+import consultantsCover from "@/assets/nikhil/consultants-review.webp";
+import siliconIndiaCover from "@/assets/nikhil/siliconindia.webp";
 
 const SITE = "https://www.elevatedindia.com/";
 
@@ -38,12 +40,38 @@ const credentials = [
 ] as const;
 
 const interests = [
-  "Royal residences & palace life",
-  "Wilderness & private safaris",
-  "Spiritual & transformational",
-  "Art, design & culture",
-  "Celebrations & private events",
-  "Family & multi-generational",
+  { index: "01", title: "Royal residences & palace life", note: "Heritage estates, private access and stays with a true sense of place.", image: desertFort, href: `${SITE}journeys/category/royal-heritage` },
+  { index: "02", title: "Wilderness & private safaris", note: "Private vehicles, expert naturalists and India’s great reserves.", image: wildernessDawn, href: `${SITE}journeys/category/wildlife-safari` },
+  { index: "03", title: "Spiritual & transformational", note: "Sacred rivers, quiet rituals and encounters that are never staged.", image: backwaterDawn, href: `${SITE}journeys/category/spiritual-sacred` },
+  { index: "04", title: "Art, design & culture", note: "Living craft, architecture and makers met in their own world.", image: artisanHands, href: `${SITE}journeys/category/culture-craft` },
+  { index: "05", title: "Celebrations & private events", note: "Occasions composed around family, place and complete discretion.", image: palaceNight, href: `${SITE}celebrations` },
+  { index: "06", title: "Family & multi-generational", note: "Many generations, one rhythm, with every detail handled privately.", image: palaceDusk, href: `${SITE}journeys/category/family` },
+] as const;
+
+const founderTimeline = [
+  { year: "2005", title: "A working life begins", body: "My wider entrepreneurial journey began in 2005 — learning how strategy becomes delivery, and how a promise earns trust only through execution." },
+  { year: "20+ years", title: "Across sectors and ventures", body: "I built and advised businesses across strategy, digital transformation and growth. Those years made systems, accountability and detail instinctive." },
+  { year: "Elevated India", title: "A private travel house", body: "With Manu Singh, I created a company that composes India and Nepal around one traveller at a time rather than selling a fixed package." },
+  { year: "Today", title: "The ground is ours", body: "Licensed guides, a chauffeured fleet and a 24/7 control room bring the most important parts of every journey under our own care." },
+] as const;
+
+const operatingModel = [
+  ["01", "Conversation", "We begin with why you are travelling, not a list of monuments."],
+  ["02", "Composition", "Pace, stays and access are selected around your sensibility."],
+  ["03", "Private access", "Local relationships open the right doors without turning culture into theatre."],
+  ["04", "Ground command", "Our guides, fleet and control room carry the promise through every mile."],
+] as const;
+
+const seasons = [
+  { when: "October — April", title: "Tiger season", body: "The prime window for India’s central reserves; safari permits are finite and release ahead.", image: wildernessDawn },
+  { when: "8 November 2026", title: "Diwali across the palaces", body: "Jaipur and Udaipur illuminated for the festival; the most characterful rooms go first.", image: palaceNight },
+  { when: "17—24 November 2026", title: "Pushkar Camel Fair", body: "A singular desert gathering approached through private camps and careful timing.", image: dunesDusk },
+] as const;
+
+const broaderWork = [
+  ["Entrepreneur", "Founder of multiple ventures across growth, media, technology and culture."],
+  ["Strategist", "Two decades applying business strategy and digital transformation to real operations."],
+  ["Mentor & investor", "Supporting founders with practical frameworks for sustainable, investor-ready growth."],
 ] as const;
 
 const chapters = [
