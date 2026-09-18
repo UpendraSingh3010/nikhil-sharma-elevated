@@ -168,21 +168,34 @@
   letter-spacing: 0.22em;
 }
 
+@utility gold-rule {
+  background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 70%, transparent), transparent);
+}
+
 @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 @keyframes sweep { from { transform: translateX(-130%); } to { transform: translateX(360%); } }
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
 .rise { animation: rise 0.8s cubic-bezier(.32,.72,0,1) both; }
 .rise-delay-1 { animation-delay: 0.1s; }
 .rise-delay-2 { animation-delay: 0.2s; }
 .rise-delay-3 { animation-delay: 0.3s; }
+.rise-delay-4 { animation-delay: 0.45s; }
 .metric-sweep { position: absolute; inset-block: 0; width: 28%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--ivory) 10%, transparent), transparent); animation: sweep 5s ease-in-out infinite; pointer-events: none; }
 .venture-scroll { scrollbar-color: color-mix(in oklab, var(--primary) 60%, transparent) transparent; scrollbar-width: thin; }
 
+.marquee-track { display: flex; width: max-content; animation: marquee 34s linear infinite; }
+.marquee-mask { mask-image: linear-gradient(90deg, transparent, black 8%, black 92%, transparent); }
+
+.reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.9s cubic-bezier(.32,.72,0,1), transform 0.9s cubic-bezier(.32,.72,0,1); }
+.reveal.is-visible { opacity: 1; transform: none; }
+
 @media (max-width: 767px) {
-  .bg-hero-scrim { background: linear-gradient(90deg, color-mix(in oklab, var(--background) 95%, transparent), color-mix(in oklab, var(--background) 64%, transparent)); }
+  .bg-hero-scrim { background: linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent), color-mix(in oklab, var(--background) 94%, transparent)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .rise, .metric-sweep { animation: none; }
+  .rise, .metric-sweep, .marquee-track { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
