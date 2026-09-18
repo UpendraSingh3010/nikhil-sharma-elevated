@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Building2, Check, Compass, Menu, MoveHorizontal, ShieldCheck, Sparkles, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Building2, Check, Menu, MoveHorizontal, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
