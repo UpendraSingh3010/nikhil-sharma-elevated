@@ -175,6 +175,9 @@
 @keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
 @keyframes sweep { from { transform: translateX(-130%); } to { transform: translateX(360%); } }
 @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes glow-breathe { 0%, 100% { opacity: 0.32; transform: scale(1); } 50% { opacity: 0.6; transform: scale(1.06); } }
+@keyframes scroll-cue { 0% { transform: translateY(0); opacity: 0.2; } 45% { transform: translateY(9px); opacity: 1; } 100% { transform: translateY(0); opacity: 0.2; } }
+@keyframes sheen { from { transform: translateX(-120%) skewX(-12deg); } to { transform: translateX(260%) skewX(-12deg); } }
 
 .rise { animation: rise 0.8s cubic-bezier(.32,.72,0,1) both; }
 .rise-delay-1 { animation-delay: 0.1s; }
@@ -190,12 +193,44 @@
 .reveal { opacity: 0; transform: translateY(34px); transition: opacity 0.9s cubic-bezier(.32,.72,0,1), transform 0.9s cubic-bezier(.32,.72,0,1); }
 .reveal.is-visible { opacity: 1; transform: none; }
 
+/* staggered children inside a revealed block */
+.reveal .stagger { opacity: 0; transform: translateY(20px); transition: opacity 0.7s cubic-bezier(.32,.72,0,1), transform 0.7s cubic-bezier(.32,.72,0,1); }
+.reveal.is-visible .stagger { opacity: 1; transform: none; }
+.reveal.is-visible .stagger:nth-child(1) { transition-delay: 0.05s; }
+.reveal.is-visible .stagger:nth-child(2) { transition-delay: 0.14s; }
+.reveal.is-visible .stagger:nth-child(3) { transition-delay: 0.23s; }
+.reveal.is-visible .stagger:nth-child(4) { transition-delay: 0.32s; }
+.reveal.is-visible .stagger:nth-child(5) { transition-delay: 0.41s; }
+.reveal.is-visible .stagger:nth-child(6) { transition-delay: 0.5s; }
+
+/* gold rule that draws itself when its section reveals */
+.rule-draw { transform: scaleX(0); transform-origin: left; transition: transform 1s cubic-bezier(.32,.72,0,1) 0.15s; }
+.reveal.is-visible .rule-draw { transform: scaleX(1); }
+
+/* underline that wipes in on hover */
+.wipe-line { position: relative; }
+.wipe-line::after { content: ""; position: absolute; left: 0; bottom: -1px; height: 1px; width: 100%; background: var(--primary); transform: scaleX(0); transform-origin: left; transition: transform 0.5s cubic-bezier(.32,.72,0,1); }
+.wipe-line:hover::after, .wipe-line:focus-visible::after { transform: scaleX(1); }
+
+/* gold fill sweeping in from the left on hover */
+.fill-sweep { position: relative; overflow: hidden; isolation: isolate; }
+.fill-sweep::before { content: ""; position: absolute; inset: 0; background: var(--primary); transform: translateX(-101%); transition: transform 0.45s cubic-bezier(.32,.72,0,1); z-index: -1; }
+.fill-sweep:hover::before, .fill-sweep:focus-visible::before { transform: none; }
+
+.glow-breathe { animation: glow-breathe 7s ease-in-out infinite; }
+.scroll-cue { animation: scroll-cue 2.2s ease-in-out infinite; }
+.sheen { position: absolute; inset-block: 0; width: 45%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 16%, transparent), transparent); pointer-events: none; opacity: 0; }
+.reveal.is-visible .sheen { opacity: 1; animation: sheen 1.9s cubic-bezier(.32,.72,0,1) 0.35s both; }
+
 @media (max-width: 767px) {
   .bg-hero-scrim { background: linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent), color-mix(in oklab, var(--background) 94%, transparent)); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .rise, .metric-sweep, .marquee-track { animation: none; }
+  .rise, .metric-sweep, .marquee-track, .glow-breathe, .scroll-cue { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal .stagger { opacity: 1; transform: none; transition: none; }
+  .rule-draw { transform: none; transition: none; }
+  .reveal.is-visible .sheen { animation: none; opacity: 0; }
 }
