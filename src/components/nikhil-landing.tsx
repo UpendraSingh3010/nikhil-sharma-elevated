@@ -1,5 +1,5 @@
 import { ArrowUpRight, Award, Menu, X } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
 import { useReveal } from "@/hooks/use-reveal";
@@ -95,7 +95,7 @@ function Section({
 }: {
   id?: string;
   className?: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   const reveal = useReveal<HTMLDivElement>();
   return (
