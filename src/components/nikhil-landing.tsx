@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Menu, MoveHorizontal, X } from "lucide-react";
+import { ArrowLeft, ArrowRight, ArrowUpRight, Award, Building2, Check, Menu, MoveHorizontal, Sparkles, X } from "lucide-react";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -16,15 +16,17 @@ import artisanHands from "@/assets/elevated/artisan-hands.jpg";
 import palaceNight from "@/assets/elevated/palace-night.jpg";
 import backwaterDawn from "@/assets/elevated/backwater-dawn.jpg";
 import marketTexture from "@/assets/elevated/market-texture.jpg";
+import consultantsCover from "@/assets/nikhil/consultants-review.webp";
+import siliconIndiaCover from "@/assets/nikhil/siliconindia.webp";
 
 const SITE = "https://www.elevatedindia.com/";
 
 const navItems = [
   ["My story", "#story"],
-  ["Chapters", "#chapters"],
+  ["Timeline", "#timeline"],
   ["Elevated India", "#company"],
   ["Journeys", "#journeys"],
-  ["Field notes", "#gallery"],
+  ["Beyond travel", "#beyond"],
   ["Recognition", "#recognition"],
 ] as const;
 
@@ -38,12 +40,38 @@ const credentials = [
 ] as const;
 
 const interests = [
-  "Royal residences & palace life",
-  "Wilderness & private safaris",
-  "Spiritual & transformational",
-  "Art, design & culture",
-  "Celebrations & private events",
-  "Family & multi-generational",
+  { index: "01", title: "Royal residences & palace life", note: "Heritage estates, private access and stays with a true sense of place.", image: desertFort, href: `${SITE}journeys/category/royal-heritage` },
+  { index: "02", title: "Wilderness & private safaris", note: "Private vehicles, expert naturalists and India’s great reserves.", image: wildernessDawn, href: `${SITE}journeys/category/wildlife-safari` },
+  { index: "03", title: "Spiritual & transformational", note: "Sacred rivers, quiet rituals and encounters that are never staged.", image: backwaterDawn, href: `${SITE}journeys/category/spiritual-sacred` },
+  { index: "04", title: "Art, design & culture", note: "Living craft, architecture and makers met in their own world.", image: artisanHands, href: `${SITE}journeys/category/culture-craft` },
+  { index: "05", title: "Celebrations & private events", note: "Occasions composed around family, place and complete discretion.", image: palaceNight, href: `${SITE}celebrations` },
+  { index: "06", title: "Family & multi-generational", note: "Many generations, one rhythm, with every detail handled privately.", image: palaceDusk, href: `${SITE}journeys/category/family` },
+] as const;
+
+const founderTimeline = [
+  { year: "2005", title: "A working life begins", body: "My wider entrepreneurial journey began in 2005 — learning how strategy becomes delivery, and how a promise earns trust only through execution." },
+  { year: "20+ years", title: "Across sectors and ventures", body: "I built and advised businesses across strategy, digital transformation and growth. Those years made systems, accountability and detail instinctive." },
+  { year: "Elevated India", title: "A private travel house", body: "With Manu Singh, I created a company that composes India and Nepal around one traveller at a time rather than selling a fixed package." },
+  { year: "Today", title: "The ground is ours", body: "Licensed guides, a chauffeured fleet and a 24/7 control room bring the most important parts of every journey under our own care." },
+] as const;
+
+const operatingModel = [
+  ["01", "Conversation", "We begin with why you are travelling, not a list of monuments."],
+  ["02", "Composition", "Pace, stays and access are selected around your sensibility."],
+  ["03", "Private access", "Local relationships open the right doors without turning culture into theatre."],
+  ["04", "Ground command", "Our guides, fleet and control room carry the promise through every mile."],
+] as const;
+
+const seasons = [
+  { when: "October — April", title: "Tiger season", body: "The prime window for India’s central reserves; safari permits are finite and release ahead.", image: wildernessDawn },
+  { when: "8 November 2026", title: "Diwali across the palaces", body: "Jaipur and Udaipur illuminated for the festival; the most characterful rooms go first.", image: palaceNight },
+  { when: "17—24 November 2026", title: "Pushkar Camel Fair", body: "A singular desert gathering approached through private camps and careful timing.", image: dunesDusk },
+] as const;
+
+const broaderWork = [
+  ["Entrepreneur", "Founder of multiple ventures across growth, media, technology and culture."],
+  ["Strategist", "Two decades applying business strategy and digital transformation to real operations."],
+  ["Mentor & investor", "Supporting founders with practical frameworks for sustainable, investor-ready growth."],
 ] as const;
 
 const chapters = [
@@ -148,6 +176,14 @@ const principles = [
     "Complete discretion",
     "Privacy is my first principle. I run the company with the discretion of a private household, not a public business.",
   ],
+  [
+    "A considered pace",
+    "The day needs enough air for a conversation, an unexpected doorway and the pleasure of not watching the clock.",
+  ],
+  [
+    "Personal accountability",
+    "The promise carries my name. I stay answerable for how it is designed, how it runs and how it feels on the ground.",
+  ],
 ] as const;
 
 function Section({
@@ -232,6 +268,7 @@ export function NikhilLanding() {
   const [progress, setProgress] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState<(typeof filters)[number]>("All journeys");
+  const [principleIndex, setPrincipleIndex] = useState(0);
   const parallax = useParallax(0.16);
   const tiltRef = useTilt(6);
 
@@ -244,6 +281,7 @@ export function NikhilLanding() {
   );
   const rail = useAutoRail(visibleJourneys.length, 3800);
   const active = visibleJourneys[Math.min(rail.index, visibleJourneys.length - 1)] ?? journeys[0];
+  const activePrinciple = principles[principleIndex] ?? principles[0];
 
   useEffect(() => {
     const onScroll = () => {
@@ -292,6 +330,18 @@ export function NikhilLanding() {
       </header>
 
       <main id="top">
+        <aside className="fixed right-5 top-1/2 z-40 hidden -translate-y-1/2 2xl:block" aria-label="Page chapters">
+          <ol className="space-y-4 border-r border-ivory/15 pr-4 text-right">
+            {navItems.map(([label, href], index) => (
+              <li key={href}>
+                <a href={href} className="group flex items-center justify-end gap-3 text-[9px] uppercase tracking-[0.2em] text-ivory/35 transition-colors hover:text-primary">
+                  <span className="opacity-0 transition-opacity group-hover:opacity-100">{label}</span>
+                  <span className="font-serif text-xs text-primary/60">0{index + 1}</span>
+                </a>
+              </li>
+            ))}
+          </ol>
+        </aside>
         {/* Opening */}
         <section className="relative overflow-hidden pt-16">
           <img
@@ -305,6 +355,8 @@ export function NikhilLanding() {
           <div className="absolute inset-0 bg-hero-scrim" aria-hidden="true" />
           <span className="vignette" aria-hidden="true" />
           <span className="grain" aria-hidden="true" />
+           <span className="route-orbit route-orbit-one" aria-hidden="true" />
+           <span className="route-orbit route-orbit-two" aria-hidden="true" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-[1440px] items-center gap-12 px-5 py-20 lg:min-h-[780px] lg:grid-cols-12 lg:px-12">
             <div className="relative lg:col-span-7">
@@ -328,7 +380,7 @@ export function NikhilLanding() {
                 </Button>
               </div>
             </div>
-            <figure className="rise rise-delay-2 relative lg:col-span-5">
+            <figure className="rise rise-delay-2 relative lg:col-span-5 lg:translate-y-8">
               <div className="glow-breathe pointer-events-none absolute -inset-6 rounded-full bg-primary/25 blur-3xl" aria-hidden="true" />
               <div
                 ref={tiltRef}
@@ -341,6 +393,10 @@ export function NikhilLanding() {
               <figcaption className="mt-3 text-[10px] uppercase tracking-[0.16em] text-ivory/45">
                 Nikhil Sharma · Founder &amp; CEO, Elevated India
               </figcaption>
+              <div className="absolute -bottom-12 -left-10 hidden border-l border-primary/60 bg-background/80 px-6 py-4 backdrop-blur-md lg:block">
+                <p className="text-[9px] uppercase tracking-[0.22em] text-primary">The standard</p>
+                <p className="mt-2 max-w-[24ch] font-serif text-lg leading-tight text-ivory">A promise should be owned from the first conversation to the last mile.</p>
+              </div>
             </figure>
           </div>
           <div
@@ -353,6 +409,23 @@ export function NikhilLanding() {
             </span>
           </div>
         </section>
+
+        <div className="relative z-10 border-y border-ivory/10 bg-ink/95">
+          <div className="mx-auto grid max-w-[1440px] grid-cols-2 divide-x divide-ivory/10 px-5 sm:grid-cols-5 lg:px-12">
+            {[
+              ["Founder & CEO", "Elevated India"],
+              ["Since 2005", "Entrepreneurial journey"],
+              ["India + Nepal", "Private journeys"],
+              ["Owned ground", "Guides & fleet"],
+              ["24/7", "Journey control"],
+            ].map(([value, label]) => (
+              <div key={value} className="group px-4 py-5 transition-colors hover:bg-primary/10 sm:px-5">
+                <p className="font-serif text-lg text-ivory transition-colors group-hover:text-primary">{value}</p>
+                <p className="mt-1 text-[8px] uppercase tracking-[0.18em] text-ivory/35">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
 
         {/* Credential marquee */}
         <div className="marquee-mask group overflow-hidden border-y border-ivory/10 bg-background py-4">
@@ -403,11 +476,42 @@ export function NikhilLanding() {
           </div>
         </Section>
 
+        {/* Founder timeline */}
+        <Section id="timeline" className="relative overflow-hidden bg-background text-ivory">
+          <span className="grain" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <div className="grid gap-12 lg:grid-cols-12">
+              <div className="lg:col-span-4">
+                <p className="section-label">02 — Founder timeline</p>
+                <h2 className="mt-6 font-serif text-[clamp(2.4rem,4.6vw,4rem)] leading-[0.98]">
+                  The work before <span className="italic text-primary">the journeys.</span>
+                </h2>
+                <p className="mt-7 max-w-[38ch] leading-relaxed text-ivory/55">
+                  Elevated India carries the same discipline I learned building and advising businesses: clarity, systems and personal accountability.
+                </p>
+              </div>
+              <div className="relative lg:col-span-8">
+                <span className="absolute bottom-0 left-[5.5rem] top-0 hidden w-px bg-primary/25 sm:block" aria-hidden="true" />
+                {founderTimeline.map((item, index) => (
+                  <article key={item.title} className="stagger group grid gap-4 border-t border-ivory/10 py-7 sm:grid-cols-[5rem_1fr] sm:gap-8">
+                    <p className="font-serif text-lg text-primary">{item.year}</p>
+                    <div className="relative sm:pl-8">
+                      <span className="absolute -left-[2.55rem] top-2 hidden size-2 rounded-full border border-primary bg-background transition-transform group-hover:scale-150 sm:block" aria-hidden="true" />
+                      <h3 className="font-serif text-2xl transition-transform duration-500 group-hover:translate-x-1">{item.title}</h3>
+                      <p className="mt-3 max-w-[58ch] text-sm leading-relaxed text-ivory/55">{item.body}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        </Section>
+
         {/* Chapters */}
         <section id="chapters" className="relative overflow-hidden scroll-mt-16 bg-background">
           <span className="grain" aria-hidden="true" />
           <div className="relative mx-auto max-w-[1440px] px-5 pt-24 lg:px-12 lg:pt-32">
-            <p className="section-label">02 — Chapters</p>
+              <p className="section-label">03 — Chapters</p>
             <h2 className="mt-6 max-w-[22ch] font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-[0.98] text-ivory">
               How the work came <span className="italic text-primary">together.</span>
             </h2>
@@ -424,7 +528,7 @@ export function NikhilLanding() {
           <span className="paper-grid" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-[1440px] gap-14 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-32">
             <div className="lg:col-span-5">
-              <p className="section-label">03 — What I built</p>
+               <p className="section-label">04 — What I built</p>
               <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.2rem)] leading-none">
                 Elevated <span className="italic text-primary">India.</span>
               </h2>
@@ -434,14 +538,16 @@ export function NikhilLanding() {
               <p className="mt-5 max-w-[46ch] leading-relaxed text-ink/55">
                 I lead the company with my co-founder and director, Manu Singh, with ground operations running through India Personal Tours.
               </p>
-              <div className="mt-10 grid gap-8 sm:grid-cols-3">
-                {principles.map(([title, body], index) => (
-                  <article key={title} className="stagger group border-t border-ink/15 pt-5 transition-colors hover:border-primary">
-                    <p className="font-serif text-2xl text-primary transition-transform duration-500 group-hover:-translate-y-1">0{index + 1}</p>
-                    <h3 className="mt-2 font-serif text-xl leading-tight">{title}</h3>
-                    <p className="mt-3 text-sm leading-relaxed text-ink/60">{body}</p>
-                  </article>
-                ))}
+               <div className="mt-10 flex gap-2" role="tablist" aria-label="My operating principles">
+                 {principles.map(([title], index) => (
+                   <Button key={title} variant="outline" size="icon" role="tab" aria-selected={principleIndex === index} onClick={() => setPrincipleIndex(index)} className={`size-10 rounded-none ${principleIndex === index ? "border-primary bg-primary text-primary-foreground" : "border-ink/20 bg-transparent text-ink"}`}>
+                     0{index + 1}
+                   </Button>
+                 ))}
+               </div>
+               <div className="mt-6 min-h-40 border-l border-primary pl-6" role="tabpanel">
+                 <h3 className="font-serif text-3xl">{activePrinciple[0]}</h3>
+                 <p className="mt-4 max-w-[44ch] leading-relaxed text-ink/60">{activePrinciple[1]}</p>
               </div>
               <Button asChild variant="outline" className="fill-sweep group mt-10 h-12 rounded-none border-ink/25 bg-transparent px-6 text-xs uppercase tracking-[0.16em] text-ink transition-colors hover:text-primary-foreground">
                 <a href={SITE} target="_blank" rel="noreferrer">
@@ -457,15 +563,37 @@ export function NikhilLanding() {
                   Rajasthan · a passage I compose most often
                 </figcaption>
               </figure>
-              <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-ink/45">What I curate</p>
-              <div className="mt-4 grid gap-x-10 gap-y-4 sm:grid-cols-2">
-                {interests.map((item, index) => (
-                  <p key={item} className="stagger wipe-line group flex items-baseline gap-3 border-t border-ink/15 pt-4 text-sm text-ink/70 transition-colors hover:text-ink">
-                    <span className="font-serif text-primary transition-transform duration-300 group-hover:translate-x-0.5">0{index + 1}</span>
-                    {item}
-                  </p>
-                ))}
-              </div>
+               <p className="mt-10 text-[10px] uppercase tracking-[0.22em] text-ink/45">How every journey is run</p>
+               <div className="mt-4 grid gap-x-8 sm:grid-cols-2">
+                 {operatingModel.map(([index, title, body]) => (
+                   <article key={title} className="stagger group border-t border-ink/15 py-5 transition-colors hover:border-primary">
+                     <div className="flex items-center gap-3"><span className="font-serif text-primary">{index}</span><h3 className="font-serif text-xl">{title}</h3></div>
+                     <p className="mt-3 text-sm leading-relaxed text-ink/55">{body}</p>
+                   </article>
+                 ))}
+               </div>
+            </div>
+          </div>
+        </Section>
+
+        {/* Curated interests */}
+        <Section className="relative overflow-hidden bg-ivory text-ink">
+          <div className="relative mx-auto max-w-[1440px] px-5 pb-24 lg:px-12 lg:pb-32">
+            <div className="flex flex-col justify-between gap-5 border-t border-ink/15 pt-10 sm:flex-row sm:items-end">
+              <div><p className="section-label">05 — A personal lens</p><h2 className="mt-5 font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-none">What I choose to <span className="italic text-primary">curate.</span></h2></div>
+              <p className="max-w-md text-sm leading-relaxed text-ink/55">Six ways into India, each shaped around access, context and enough time for a place to become personal.</p>
+            </div>
+            <div className="mt-12 grid gap-px bg-ink/15 sm:grid-cols-2 lg:grid-cols-3">
+              {interests.map((item) => (
+                <a key={item.title} href={item.href} target="_blank" rel="noreferrer" className="group relative min-h-72 overflow-hidden bg-ink">
+                  <img src={item.image} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55 transition duration-700 group-hover:scale-105 group-hover:opacity-35" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink via-ink/20 to-transparent" aria-hidden="true" />
+                  <div className="absolute inset-0 flex flex-col justify-between p-6 text-ivory">
+                    <span className="font-serif text-xl text-primary">{item.index}</span>
+                    <div><h3 className="font-serif text-2xl leading-tight">{item.title}</h3><p className="mt-3 max-h-0 overflow-hidden text-sm leading-relaxed text-ivory/70 opacity-0 transition-all duration-500 group-hover:max-h-24 group-hover:opacity-100">{item.note}</p></div>
+                  </div>
+                </a>
+              ))}
             </div>
           </div>
         </Section>
@@ -476,7 +604,7 @@ export function NikhilLanding() {
           <span className="grain" aria-hidden="true" />
           <div className="relative py-24 lg:py-32">
             <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-              <p className="section-label">04 — The journeys I curate</p>
+               <p className="section-label">06 — The journeys I curate</p>
               <h2 className="mt-6 font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
                 Journeys of rare <span className="italic text-primary">distinction.</span>
               </h2>
@@ -500,35 +628,36 @@ export function NikhilLanding() {
               {/* filter chips */}
               <div className="mt-10 flex flex-wrap gap-2" role="group" aria-label="Filter journeys">
                 {filters.map((item) => (
-                  <button
+                   <Button
                     key={item}
-                    type="button"
+                     variant="outline"
                     onClick={() => {
                       setFilter(item);
                       rail.scrollTo(0);
                     }}
                     aria-pressed={filter === item}
-                    className={`border px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
+                     className={`h-9 rounded-none border px-4 py-2 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 ${
                       filter === item
                         ? "border-primary bg-primary text-primary-foreground"
                         : "border-ivory/20 text-ivory/55 hover:-translate-y-0.5 hover:border-primary/60 hover:text-primary"
                     }`}
                   >
                     {item}
-                  </button>
+                   </Button>
                 ))}
               </div>
 
-              {/* active journey preview */}
-              <div className="mt-8 grid items-end gap-4 border-t border-ivory/10 pt-6 sm:grid-cols-[1fr_auto]">
-                <div>
-                  <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{active.region}</p>
-                  <p className="mt-2 font-serif text-2xl leading-tight text-ivory sm:text-3xl">{active.title}</p>
-                </div>
-                <p className="text-[10px] uppercase tracking-[0.2em] text-ivory/45">
-                  {active.days} · {rail.index + 1} of {visibleJourneys.length}
-                </p>
-              </div>
+               {/* active journey stage */}
+               <div className="relative mt-8 min-h-[420px] overflow-hidden border border-ivory/10">
+                 <img key={active.title} src={active.image} alt="" className="animate-fade-in absolute inset-0 h-full w-full object-cover" />
+                 <div className="absolute inset-0 bg-gradient-to-r from-ink via-ink/65 to-transparent" aria-hidden="true" />
+                 <div className="relative flex min-h-[420px] max-w-xl flex-col justify-end p-7 sm:p-10">
+                   <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{active.region} · {active.days}</p>
+                   <h3 className="mt-3 font-serif text-4xl leading-none text-ivory sm:text-5xl">{active.title}</h3>
+                   <p className="mt-5 max-w-[48ch] leading-relaxed text-ivory/70">{active.blurb}</p>
+                   <p className="mt-6 text-[10px] uppercase tracking-[0.2em] text-ivory/45">Journey {rail.index + 1} of {visibleJourneys.length}</p>
+                 </div>
+               </div>
             </div>
 
             <div
@@ -569,11 +698,33 @@ export function NikhilLanding() {
           </div>
         </Section>
 
+        {/* Seasonal India */}
+        <Section className="relative overflow-hidden bg-ivory text-ink">
+          <span className="paper-grid" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <p className="section-label">07 — Worth planning ahead</p>
+            <div className="mt-6 flex flex-col justify-between gap-6 sm:flex-row sm:items-end">
+              <h2 className="max-w-[18ch] font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-[0.98]">India has moments that will not <span className="italic text-primary">wait.</span></h2>
+              <a href={`${SITE}seasons`} target="_blank" rel="noreferrer" className="wipe-line text-xs uppercase tracking-[0.16em]">See current seasons <ArrowUpRight className="ml-2 inline size-4" /></a>
+            </div>
+            <div className="mt-12 grid gap-8 lg:grid-cols-3">
+              {seasons.map((season) => (
+                <article key={season.title} className="stagger group">
+                  <div className="overflow-hidden"><img src={season.image} alt="" loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-105" /></div>
+                  <p className="mt-5 text-[10px] uppercase tracking-[0.2em] text-primary">{season.when}</p>
+                  <h3 className="mt-2 font-serif text-2xl">{season.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink/55">{season.body}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </Section>
+
         {/* Field notes gallery */}
         <Section id="gallery" className="relative overflow-hidden bg-background">
           <div className="relative pt-24 lg:pt-32">
             <div className="mx-auto max-w-[1440px] px-5 lg:px-12">
-              <p className="section-label">05 — Field notes</p>
+               <p className="section-label">08 — Field notes</p>
               <h2 className="mt-6 max-w-[24ch] font-serif text-[clamp(2.3rem,4.6vw,4rem)] leading-[0.98] text-ivory">
                 Frames from the road I <span className="italic text-primary">keep returning to.</span>
               </h2>
@@ -606,7 +757,7 @@ export function NikhilLanding() {
           <span className="paper-grid" aria-hidden="true" />
           <div className="relative mx-auto grid max-w-[1440px] gap-12 px-5 py-24 lg:grid-cols-12 lg:px-12 lg:py-28">
             <div className="lg:col-span-5">
-              <p className="section-label">06 — Where it stands</p>
+               <p className="section-label">09 — Where it stands</p>
               <h2 className="mt-6 font-serif text-[clamp(2.2rem,4.2vw,3.6rem)] leading-[1] ">
                 Judged by the people who <span className="italic">travelled with us.</span>
               </h2>
@@ -628,11 +779,46 @@ export function NikhilLanding() {
           </div>
         </Section>
 
+        {/* Beyond Elevated India */}
+        <Section id="beyond" className="relative overflow-hidden bg-background text-ivory">
+          <span className="grain" aria-hidden="true" />
+          <div className="relative mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
+            <div className="grid gap-14 lg:grid-cols-12">
+              <div className="lg:col-span-5">
+                <p className="section-label">10 — Beyond travel</p>
+                <h2 className="mt-6 font-serif text-[clamp(2.4rem,4.8vw,4.2rem)] leading-[0.98]">
+                  One founder. A wider field of <span className="italic text-primary">work.</span>
+                </h2>
+                <p className="mt-7 max-w-[46ch] leading-relaxed text-ivory/60">
+                  Elevated India is one expression of a wider working life. Since 2005, I have built, advised and invested across strategy, technology, media, wellness and culture.
+                </p>
+                <a href="https://www.nikhilsharma.com/home" target="_blank" rel="noreferrer" className="group mt-9 inline-flex items-center gap-2 border-b border-primary pb-1 text-xs uppercase tracking-[0.16em] transition-colors hover:text-primary">
+                  Explore my wider work <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </a>
+              </div>
+              <div className="lg:col-span-7">
+                {broaderWork.map(([title, body], index) => (
+                  <article key={title} className="stagger group grid gap-4 border-t border-ivory/10 py-7 sm:grid-cols-[3rem_1fr_auto] sm:items-start">
+                    <span className="font-serif text-2xl text-primary/50">0{index + 1}</span>
+                    <div><h3 className="font-serif text-2xl">{title}</h3><p className="mt-3 max-w-[50ch] text-sm leading-relaxed text-ivory/55">{body}</p></div>
+                    <Building2 className="hidden size-5 text-primary/50 transition-transform group-hover:-translate-y-1 sm:block" aria-hidden="true" />
+                  </article>
+                ))}
+                <div className="mt-10 grid grid-cols-2 gap-px bg-ivory/10 sm:grid-cols-4">
+                  {["AnandBodh", "IconsBase", "Fabulous.Media", "Vanishing India"].map((venture) => (
+                    <div key={venture} className="bg-background px-4 py-6 text-center font-serif text-lg text-ivory/65 transition-colors hover:text-primary">{venture}</div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </Section>
+
         {/* Recognition */}
         <Section id="recognition" className="relative overflow-hidden bg-background text-ivory">
           <span className="grain" aria-hidden="true" />
           <div className="relative mx-auto max-w-[1440px] px-5 py-24 lg:px-12 lg:py-32">
-            <p className="section-label">07 — Recognition</p>
+             <p className="section-label">11 — Recognition archive</p>
             <div className="mt-6 grid items-center gap-12 lg:grid-cols-12">
               <div className="lg:col-span-6">
                 <h2 className="font-serif text-[clamp(2.4rem,5vw,4.4rem)] leading-none">
@@ -643,7 +829,7 @@ export function NikhilLanding() {
                   My company was awarded at the ET NOW.IN Business Conclave &amp; Awards 2026, West Edition — Mumbai, 25 August 2026.
                 </p>
               </div>
-              <div className="lg:col-span-6">
+               <div className="lg:col-span-6">
                 <div className="foil group relative overflow-hidden border border-ivory/15 p-8 backdrop-blur-sm transition-colors duration-500 hover:border-primary/60 sm:p-12">
                   <span className="sheen" aria-hidden="true" />
                   <Award className="size-8 text-primary transition-transform duration-500 group-hover:scale-110" aria-hidden="true" />
@@ -656,6 +842,35 @@ export function NikhilLanding() {
                 </div>
               </div>
             </div>
+             <div className="mt-16 grid gap-px bg-ivory/10 lg:grid-cols-4">
+               {[
+                 ["2019", "Most Influential Digital Marketing Expert — India", "Global Excellence Programme AI Global"],
+                 ["2019", "Top Digital Marketing Consultant in India", "Consultants Review · Jan–Feb 2019"],
+                 ["2019", "Fearless Entrepreneur", "The Enterprise World · July 2019"],
+                 ["Recognition", "Former Truecaller Brand Ambassador", "Truecaller"],
+               ].map(([year, title, source]) => (
+                 <article key={title} className="group min-h-56 bg-background p-6 transition-colors hover:bg-primary/10">
+                   <p className="text-[10px] uppercase tracking-[0.2em] text-primary">{year}</p>
+                   <h3 className="mt-7 font-serif text-2xl leading-tight">{title}</h3>
+                   <p className="mt-4 text-xs leading-relaxed text-ivory/45">{source}</p>
+                   <Check className="mt-7 size-4 text-primary/60" aria-hidden="true" />
+                 </article>
+               ))}
+             </div>
+             <div className="mt-16 border-t border-ivory/10 pt-10">
+               <div className="flex items-end justify-between gap-6"><div><p className="text-[10px] uppercase tracking-[0.2em] text-primary">In the press</p><h3 className="mt-3 font-serif text-3xl">Two cover stories.</h3></div><Sparkles className="size-6 text-primary/50" aria-hidden="true" /></div>
+               <div className="mt-8 grid gap-6 sm:grid-cols-2">
+                 {[
+                   [siliconIndiaCover, "siliconindia · October 2021", "Profound Excellence in the Digital Frontier"],
+                   [consultantsCover, "Consultants Review · February 2019", "Driving Business Growth with Cutting Edge but Pragmatic Technology"],
+                 ].map(([image, issue, title]) => (
+                   <article key={title} className="group grid grid-cols-[7rem_1fr] gap-5 border border-ivory/10 p-4 transition-colors hover:border-primary/50">
+                     <img src={image} alt={`${issue} cover`} loading="lazy" className="aspect-[3/4] w-full object-cover" />
+                     <div className="py-2"><p className="text-[9px] uppercase tracking-[0.18em] text-primary">{issue}</p><h4 className="mt-4 font-serif text-xl leading-tight">{title}</h4><p className="mt-4 text-xs text-ivory/40">Official cover story</p></div>
+                   </article>
+                 ))}
+               </div>
+             </div>
           </div>
         </Section>
 

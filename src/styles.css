@@ -222,6 +222,13 @@
 .sheen { position: absolute; inset-block: 0; width: 45%; background: linear-gradient(90deg, transparent, color-mix(in oklab, var(--primary) 16%, transparent), transparent); pointer-events: none; opacity: 0; }
 .reveal.is-visible .sheen { opacity: 1; animation: sheen 1.9s cubic-bezier(.32,.72,0,1) 0.35s both; }
 
+.route-orbit { position: absolute; pointer-events: none; border: 1px solid color-mix(in oklab, var(--primary) 38%, transparent); border-left-color: transparent; border-bottom-color: transparent; border-radius: 50%; filter: drop-shadow(0 0 7px color-mix(in oklab, var(--primary) 24%, transparent)); opacity: 0.55; }
+.route-orbit::after { content: ""; position: absolute; width: 7px; height: 7px; border-radius: 999px; background: var(--primary); box-shadow: 0 0 16px color-mix(in oklab, var(--primary) 70%, transparent); }
+.route-orbit-one { width: 62vw; height: 34vw; left: 18%; top: 19%; transform: rotate(8deg); }
+.route-orbit-one::after { right: 7%; top: 13%; }
+.route-orbit-two { width: 42vw; height: 22vw; right: -9%; bottom: 9%; transform: rotate(-16deg); opacity: 0.28; }
+.route-orbit-two::after { left: 8%; bottom: 14%; }
+
 /* ---- layered surface craft ---- */
 
 /* fine film grain over dark sections */
@@ -300,6 +307,7 @@
 
 @media (max-width: 767px) {
   .bg-hero-scrim { background: linear-gradient(180deg, color-mix(in oklab, var(--background) 72%, transparent), color-mix(in oklab, var(--background) 94%, transparent)); }
+  .route-orbit { display: none; }
 }
 
 @media (prefers-reduced-motion: reduce) {
