@@ -304,7 +304,10 @@
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .rise, .metric-sweep, .marquee-track, .glow-breathe, .scroll-cue { animation: none; }
+  .rise, .metric-sweep, .marquee-track, .glow-breathe, .scroll-cue, .drift-row { animation: none; }
+  .line-rise > span, .reveal .slide-l, .reveal .slide-r { opacity: 1; transform: none; transition: none; }
+  .zoom-frame figcaption { opacity: 1; transform: none; }
+  .zoom-frame:hover img { transform: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
   .reveal .stagger { opacity: 1; transform: none; transition: none; }
   .rule-draw { transform: none; transition: none; }
